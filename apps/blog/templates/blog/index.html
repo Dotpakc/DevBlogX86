@@ -8,7 +8,8 @@
     <hr />
     <div class="grid grid-cols-3 gap-7 mt-4">
         {% for post in all_posts %}
-            <div class="card w-100 bg-base-300 shadow-xl"> 
+            <div class="card w-100 bg-base-300 shadow-xl hover:bg-base-100 transition-all duration-300 hover:shadow-2xl">
+              <a href="{% url 'blog:detail' post.id %}">
                     <figure><img src="{% if not post.image %} 
                     https://upload.wikimedia.org/wikipedia/ru/thumb/6/61/Rickrolling.gif/200px-Rickrolling.gif
                     {% else %}
@@ -18,11 +19,11 @@
                 
                 <div class="card-body">
                   <h2 class="card-title">{{ post.title }}</h2>
-                  <p>{{ post.content }}</p>
                   <div class="card-actions justify-end">
-                    <button class="btn btn-primary">Buy Now</button>
+                    
                   </div>
                 </div>
+              </a>
               </div>
 
               

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+    <img src="{% if not post.image %}
+    https://upload.wikimedia.org/wikipedia/ru/thumb/6/61/Rickrolling.gif/200px-Rickrolling.gif
+    {% else %}
+    https://upload.wikimedia.org/wikipedia/ru/thumb/6/61/Rickrolling.gif/200px-Rickrolling.gif
+    
+    {% endif %}" alt="Shoes" class="w-full max-h-96 object-cover mb-4" />
+
+    <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
+    <p class="text-gray-500 mb-4">Автор: {{ post.author }}</p>
+    <p class="text-gray-500 mb-4">Дата: {{ post.created_at }}</p>
+    <p class="mb-4">{{ post.content }}</p>
+    <a href="{% url 'blog:index' %}" class="btn btn-primary">Назад</a>
+    
+
+{% endblock %}
+  
