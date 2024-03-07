@@ -1,33 +1,54 @@
 {% extends 'base.html' %}
-
+{% load thumbnail %}
 {% block title %}Blog{% endblock %}
 
 {% block content %}
-    <h1>Блог</h1>
-    <p>Ти на сторінці блогу.</p>
-    <hr />
-    <div class="grid grid-cols-3 gap-7 mt-4">
+    <div class="my-4 rounded-lg bg-base-300 p-9 ">
+    <h1 class = "text-3xl font-bold mb-4">Blog</h1>
+    <a onclick="my_modal_4.showModal()" class="btn btn-primary">Create Post</a>
+    <div class="my-4 border-b-2 border-gray-300 w-full"></div>
+    <div class="grid grid-cols-3 gap-7">
         {% for post in all_posts %}
-            <div class="card w-100 bg-base-300 shadow-xl"> 
-                    <figure><img src="{% if not post.image %} 
+            <div class="card w-100 bg-base-200 shadow-xl hover:bg-base-100 transition-all duration-300 hover:shadow-2xl">
+              <a href="{% url 'blog:detail' post.id %}">
+                    <figure>
+                      <img src="{% if not post.image %} 
                     https://upload.wikimedia.org/wikipedia/ru/thumb/6/61/Rickrolling.gif/200px-Rickrolling.gif
                     {% else %}
-                    https://upload.wikimedia.org/wikipedia/ru/thumb/6/61/Rickrolling.gif/200px-Rickrolling.gif
-                    
+                    {{ post.image.url }}            
                     {% endif %} " alt="Shoes" class="w-full" /></figure>
                 
                 <div class="card-body">
                   <h2 class="card-title">{{ post.title }}</h2>
-                  <p>{{ post.content }}</p>
                   <div class="card-actions justify-end">
-                    <button class="btn btn-primary">Buy Now</button>
+                    
                   </div>
                 </div>
+              </a>
               </div>
 
               
         {% endfor %}
     </div>
+  </div>
+
+
+
+
+  <dialog id="my_modal_4" class="modal">
+    <div class="modal-box w-11/12 max-w-5xl">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <h3 class="font-bold text-lg mb-4">Create Post</h3>
+      <form action="{% url 'blog:create' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ created_form }}
+        <button class="btn btn-primary">Create</button>
+      </form>
+    </div>
+  </dialog>
+
 
 {% endblock %}
   
