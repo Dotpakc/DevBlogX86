@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+    <h1>Блог</h1>
+    <p>Ти на сторінці блогу.</p>
+    <hr />
+    <div class="grid grid-cols-3 gap-7 mt-4">
+        {% for post in all_posts %}
+            <div class="card w-100 bg-base-300 shadow-xl"> 
+                    <figure><img src="{% if not post.image %} 
+                    https://upload.wikimedia.org/wikipedia/ru/thumb/6/61/Rickrolling.gif/200px-Rickrolling.gif
+                    {% else %}
+                    https://upload.wikimedia.org/wikipedia/ru/thumb/6/61/Rickrolling.gif/200px-Rickrolling.gif
+                    
+                    {% endif %} " alt="Shoes" class="w-full" /></figure>
+                
+                <div class="card-body">
+                  <h2 class="card-title">{{ post.title }}</h2>
+                  <p>{{ post.content }}</p>
+                  <div class="card-actions justify-end">
+                    <button class="btn btn-primary">Buy Now</button>
+                  </div>
+                </div>
+              </div>
+
+              
+        {% endfor %}
+    </div>
+
+{% endblock %}
+  
