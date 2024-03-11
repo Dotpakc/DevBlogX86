@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-(+d-3y+r*_v#e_qnghvvg!l8=%a)-rqy3l@b@8f8e^%w6*6ee*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['lol.ithillelcraft.com', 'localhost', '127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://lol.ithillelcraft.com',
+    # Додайте сюди інші довірені домени, якщо потрібно
+]
 
 
 # Application definition
@@ -40,6 +45,7 @@ INSTALLED_APPS = [
         
     'apps.main',
     'apps.blog',
+    'apps.members',
 ]
 
 MIDDLEWARE = [
