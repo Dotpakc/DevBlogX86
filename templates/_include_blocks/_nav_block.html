@@ -3,14 +3,38 @@
     <div class="navbar-start">
       <a class="btn btn-ghost text-xl" href="{% url 'main:index' %}">🎈🐍DEVBLOGX86</a>
     </div>
-    <div class="navbar-center hidden lg:flex">
+    <div class="navbar-center flex">
       <ul class="menu menu-horizontal px-1">
         <li><a href="{% url 'main:lol' %}">lol</a></li>
         <li><a href="{% url 'blog:index' %}">Blog</a></li>
       </ul>
     </div>
-    <div class="navbar-end hidden lg:flex">
-      <a class="btn">Button</a>
+    <div class="navbar-end flex">
+      
+
+      {% if user.is_authenticated %}
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+          <div class="w-10 rounded-full">
+            <img alt="Tailwind CSS Navbar component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+          </div>
+        </div>
+        <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-box w-52">
+          <span class="p-2 text-sm text-primary">Hello, <b>{{ user.username }}</b></span>
+          <hr class="my-2 border-base-100">
+          <li>
+            <a class="justify-between" href="{% url 'members:profile' %}">
+              Profile
+              <span class="badge">New</span>
+            </a>
+          </li>
+          <li><a href="{% url 'members:logout' %}">Logout</a></li>
+        </ul>
+      </div>
+      {% else %}
+        <a href="{% url 'members:login' %}" class="btn btn-ghost">Login</a>
+        <a href="{% url 'members:signup' %}" class="btn btn-ghost">Signup</a>
+      {% endif %}
     </div>
     </div>
   </div>
