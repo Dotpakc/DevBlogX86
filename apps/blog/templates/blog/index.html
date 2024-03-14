@@ -29,6 +29,20 @@
               
         {% endfor %}
     </div>
+    <div class="join align-center justify-center flex my-4">
+      {% if all_posts.has_previous %}
+      <a href="?page=1" class="join-item btn">«</a>
+      <a href="?page={{ all_posts.previous_page_number }}" class="join-item btn">Page {{ all_posts.previous_page_number }}</a>
+      {% endif %}
+
+      <button class="join-item btn btn-primary">Page {{ all_posts.number }}</button>
+
+      {% if all_posts.has_next %}
+      <a href="?page={{ all_posts.next_page_number }}" class="join-item btn">Page {{ all_posts.next_page_number }}</a>
+      <a href="?page={{ all_posts.paginator.num_pages }}" class="join-item btn">»</a>
+      
+      {% endif %}
+    </div>
   </div>
 
 
