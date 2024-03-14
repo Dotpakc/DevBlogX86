@@ -25,9 +25,10 @@ def index(request):
 @login_required
 def detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    
+    update_form = PostForm(instance=post)
     context = {
-        'post': post
+        'post': post,
+        'update_form': update_form
     }
     return render(request, 'blog/detail.html', context)
 
@@ -40,4 +41,21 @@ def create_view(request):
             post.author = request.user
             post.save()
             return redirect('blog:detail' , post_id=post.id)
+    return redirect('blog:index')
+
+@login_required
+def delete_view(request, post_id):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=post_id, author=request.user)
+        post.delete()
+    return redirect('blog:index')
+
+@login_required
+def update_view(request, post_id):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=post_id, author=request.user)
+        form = PostForm(request.POST, request.FILES, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('blog:detail', post_id=post.id)
     return redirect('blog:index')

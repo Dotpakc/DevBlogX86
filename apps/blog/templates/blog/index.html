@@ -56,8 +56,24 @@
       <h3 class="font-bold text-lg mb-4">Create Post</h3>
       <form action="{% url 'blog:create' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ created_form }}
+        <div class="grid grid-cols-1 gap-6">
+        {% for field in created_form %}
+          <div class="form-control">
+              <label class="label">
+                <span class="label-text">{{ field.label }}</span>
+              </label>
+           {% if field.name == 'content' %}
+            <textarea class="textarea textarea-bordered" name="{{ field.name }}" placeholder="{{ field.label }}" rows="5"></textarea>
+            {% elif field.name == 'image' %}
+            <input type="file" name="{{ field.name }}" class="file-input file-input-bordered file-input-accent  w-full max-w-xs" placeholder="{{ field.label }}">
+            {% else %}
+            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="input input-bordered" placeholder="{{ field.label }}">
+            {% endif %}
+          </div>
+        {% endfor %}
         <button class="btn btn-primary">Create</button>
+      </div>
+        
       </form>
     </div>
   </dialog>
