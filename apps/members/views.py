@@ -4,6 +4,9 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
 
+from apps.blog.models import Post
+from apps.blog.forms import PostForm
+
 # Create your views here.
 def login_view(request):
     form = AuthenticationForm()
@@ -32,6 +35,12 @@ def signup_view(request):
     
     return render(request, 'members/signup.html', {'form': form})
 
-
+@login_required
 def profile_view(request):
-    return render(request, 'members/profile.html')
+    posts = Post.objects.filter(author=request.user)
+    created_form = PostForm()
+    context = { 
+        'posts': posts,
+        'created_form': created_form,
+    }
+    return render(request, 'members/profile.html', context)
