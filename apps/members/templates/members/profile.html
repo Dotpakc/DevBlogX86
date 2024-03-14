@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %} Profile {% endblock %}
+
+{% block content %}
+    <div class="flex justify-center items-center my-10 ">
+        <div class="w-1/2 bg-base-200 p-10 rounded-box">
+            <h1 class="text-3xl font-bold mb-4">Profile</h1>
+            <p class="text-gray-500 mb-4">Username: {{ user.username }}</p>
+            <p class="text-gray-500 mb-4">Email: {{ user.email }}</p>
+            <a href="{% url 'members:logout' %}" class="btn btn-primary">Logout</a>
+        </div>
+    </div>
+{% endblock %}
+
+
+  

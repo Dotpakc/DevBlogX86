@@ -29,5 +29,7 @@ def create_view(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save()
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
             return redirect('blog:detail' , post_id=post.id)
