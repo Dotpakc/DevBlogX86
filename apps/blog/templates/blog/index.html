@@ -8,26 +8,24 @@
     <div class="my-4 border-b-2 border-gray-300 w-full"></div>
     <div class="grid grid-cols-3 gap-7">
         {% for post in all_posts %}
-            <div class="card w-100 bg-base-200 shadow-xl hover:bg-base-100 transition-all duration-300 hover:shadow-2xl">
-              <a href="{% url 'blog:detail' post.id %}">
-                    <figure>
-                      <img src="{% if not post.image %} 
-                    https://upload.wikimedia.org/wikipedia/ru/thumb/6/61/Rickrolling.gif/200px-Rickrolling.gif
-                    {% else %}
-                    {{ post.image.url }}            
-                    {% endif %} " alt="Shoes" class="w-full" /></figure>
-                
-                <div class="card-body">
-                  <h2 class="card-title">{{ post.title }}</h2>
-                  <div class="card-actions justify-end">
-                    
-                  </div>
-                </div>
-              </a>
-              </div>
+    
+          {% include 'blog/_include_blocks/_card_post.html' with post=post %}
 
-              
         {% endfor %}
+    </div>
+    <div class="join align-center justify-center flex my-4">
+      {% if all_posts.has_previous %}
+      <a href="?page=1" class="join-item btn">«</a>
+      <a href="?page={{ all_posts.previous_page_number }}" class="join-item btn">Page {{ all_posts.previous_page_number }}</a>
+      {% endif %}
+
+      <button class="join-item btn btn-primary">Page {{ all_posts.number }}</button>
+
+      {% if all_posts.has_next %}
+      <a href="?page={{ all_posts.next_page_number }}" class="join-item btn">Page {{ all_posts.next_page_number }}</a>
+      <a href="?page={{ all_posts.paginator.num_pages }}" class="join-item btn">»</a>
+      
+      {% endif %}
     </div>
   </div>
 
@@ -42,8 +40,24 @@
       <h3 class="font-bold text-lg mb-4">Create Post</h3>
       <form action="{% url 'blog:create' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ created_form }}
+        <div class="grid grid-cols-1 gap-6">
+        {% for field in created_form %}
+          <div class="form-control">
+              <label class="label">
+                <span class="label-text">{{ field.label }}</span>
+              </label>
+           {% if field.name == 'content' %}
+            <textarea class="textarea textarea-bordered" name="{{ field.name }}" placeholder="{{ field.label }}" rows="5"></textarea>
+            {% elif field.name == 'image' %}
+            <input type="file" name="{{ field.name }}" class="file-input file-input-bordered file-input-accent  w-full max-w-xs" placeholder="{{ field.label }}">
+            {% else %}
+            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="input input-bordered" placeholder="{{ field.label }}">
+            {% endif %}
+          </div>
+        {% endfor %}
         <button class="btn btn-primary">Create</button>
+      </div>
+        
       </form>
     </div>
   </dialog>
