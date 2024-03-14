@@ -11,6 +11,10 @@
     {% endif %}" alt="Shoes" class="w-full max-h-96 object-cover mb-4" />
 
     <h1 class="text-3xl font-bold mb-4">{{ post.title }}</h1>
+    <div class="my-4 border-b-2 border-gray-200 p-4">
+        <a href="" class="btn btn-secondary">Редагувати</a>
+        <a href="" class="btn btn-danger">Видалити</a>
+    </div>
     <p class="text-gray-500 mb-4">Автор: {{ post.author }}</p>
     <p class="text-gray-500 mb-4">Дата: {{ post.created_at }}</p>
     <p class="mb-4">{{ post.content }}</p>

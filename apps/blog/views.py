@@ -14,7 +14,7 @@ def index(request):
     paginator = Paginator(all_posts, 3)
     page = request.GET.get('page')
     all_posts_page = paginator.get_page(page)
-        
+
     context = {
         'all_posts': all_posts_page,
         'created_form': PostForm()
@@ -40,3 +40,4 @@ def create_view(request):
             post.author = request.user
             post.save()
             return redirect('blog:detail' , post_id=post.id)
+    return redirect('blog:index')
