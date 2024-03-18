@@ -21,6 +21,7 @@ class Post(models.Model):
         processors=[Thumbnail(400, 200)],
         format='JPEG',
         options={'quality': 60})
+    like = models.ManyToManyField(User, related_name='like_posts', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
