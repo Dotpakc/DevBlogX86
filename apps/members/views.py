@@ -32,7 +32,7 @@ def signup_view(request):
             user = form.save()
             login(request, user)
             return redirect('main:index')
-    
+            
     return render(request, 'members/signup.html', {'form': form})
 
 @login_required
