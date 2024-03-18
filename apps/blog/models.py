@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from imagekit.models import ImageSpecField, ProcessedImageField
+from imagekit.processors import ResizeToFill, Thumbnail, SmartCrop
 
 # Create your models here.
 class Post(models.Model):
@@ -8,10 +10,20 @@ class Post(models.Model):
         
     title = models.CharField(max_length=100)
     content = models.TextField()
-    image = models.ImageField(upload_to='post_images')
+    image = ProcessedImageField(
+        upload_to='posts',
+        processors=[ ResizeToFill(800, 400),
+                    SmartCrop(800, 400)],
+        format='JPEG',
+        options={'quality': 60})
+    thumbnail = ImageSpecField(
+        source='image',
+        processors=[Thumbnail(400, 200)],
+        format='JPEG',
+        options={'quality': 60})
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
-    
+
 
     class Meta:
         ordering = ['-created_at']
