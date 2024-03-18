@@ -63,5 +63,24 @@
   </dialog>
 
 
+
+<script>
+  function like(id) {
+    fetch(`like/${id}`, {
+      method: 'GET',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if(data.user_like){
+        document.getElementById(`like_${id}`).innerHTML = `<i class="fa fa-heart text-red-500"></i> ${data.like_count}`;
+        }else{
+          document.getElementById(`like_${id}`).innerHTML = `<i class="fa fa-heart text-white"></i> ${data.like_count}`;
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
+</script>
 {% endblock %}
   

@@ -1,4 +1,6 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
+from django.http import JsonResponse, HttpResponse
+
 from django.contrib.auth.decorators import login_required
 #pagination
 from django.core.paginator import Paginator
@@ -59,3 +61,15 @@ def update_view(request, post_id):
             form.save()
             return redirect('blog:detail', post_id=post.id)
     return redirect('blog:index')
+
+@login_required
+def like_view(request, post_id):
+    if request.method == 'GET':
+        post = get_object_or_404(Post, pk=post_id)
+        if request.user in post.like.all():
+            post.like.remove(request.user)
+            user_like = False
+        else:
+            post.like.add(request.user)
+            user_like = True
+        return JsonResponse( {'like_count': post.like.count(), 'user_like': user_like} )
