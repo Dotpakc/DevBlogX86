@@ -24,4 +24,5 @@ urlpatterns = [ #google.com/
     path('blog/', include('apps.blog.urls')),#google.com/blog/
     path('members/', include('apps.members.urls')),#google.com/members/
     path('', include('apps.main.urls')),#google.com/
+    path("__debug__/", include("debug_toolbar.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

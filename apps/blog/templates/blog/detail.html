@@ -20,8 +20,29 @@
     <p class="text-gray-500 mb-4">Автор: {{ post.author }}</p>
     <p class="text-gray-500 mb-4">Дата: {{ post.created_at }}</p>
     <p class="mb-4">{{ post.content }}</p>
-    <a href="{% url 'blog:index' %}" class="btn btn-primary">Назад</a>
+    <!-- <a href="{% url 'blog:index' %}" class="btn btn-primary">Назад</a> -->
     
+    <hr class="my-4">
+    <h3 class="text-2xl font-bold mb-4">Comments</h3>
+    <form action="{% url 'blog:comment' post_id=post.id %}" method="post">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 gap-6">
+            <div class="form-control">
+                <textarea class="textarea textarea-bordered textarea-primary text-2xl" name="content" placeholder="Коментар" rows="3"></textarea>
+            </div>
+            <button class="btn btn-primary">Коментувати</button>
+        </div>
+    </form>
+    <div class="grid grid-cols-1 gap-6 mt-4">
+        {% for comment in post.comments.all %}
+        <div class="p-4 bg-base-200 rounded-lg w-flex">
+            <p class="text-gray-500 mb-4">Автор: {{ comment.author }}</p>
+            <p class="text-gray-500 mb-4">Створений: {{ comment.created_at|timesince }} тому</p>
+            <p>{{ comment.content }}</p>
+            <button id="like_{{comment.id}}" onclick='like({{comment.id}})'  class="btn btn-square  text-white text-lg"><i class="fa-solid fa-heart {%if user in comment.like %}text-red-500{%else%}text-white{%endif%}"></i>{{ comment.like.count }}</button>
+        </div>
+        {% endfor %}
+    </div>
 
 
 
@@ -77,5 +98,28 @@
         </div>
         </dialog>
 
+
+
+
+        <script>
+          function like(id) {
+            fetch(`/blog/like_comment/${id}`, {
+              method: 'GET',
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if(data.user_like){
+                document.getElementById(`like_${id}`).innerHTML = `<i class="fa fa-heart text-red-500"></i> ${data.like_count}`;
+                }else{
+                  document.getElementById(`like_${id}`).innerHTML = `<i class="fa fa-heart text-white"></i> ${data.like_count}`;
+                }
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+                  // Redirect to the login page
+                //window.location.href = "{% url 'members:login' %}";
+              });
+          }
+        </script>
 {% endblock %}
   

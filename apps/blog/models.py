@@ -41,3 +41,22 @@ class Post(models.Model):
     
     def get_thumbnail(self):
         return self.thumbnail.url
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    # recursive comment reply system
+    # parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
+    
+    like = models.ManyToManyField(User, related_name='like_comments', blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return self.content
