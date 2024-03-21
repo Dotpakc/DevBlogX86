@@ -38,28 +38,25 @@ class Post(models.Model):
         ordering = ['-created_at']
         
     
-    #thumbnail - він потрібен для того, щоб зменшити розмір зображення для відображення на головній сторінці
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.image:
-            self.set_thumbnail()
-        
-        super().save(*args, **kwargs)
-        
-        
-    def set_thumbnail(self):
-        img = Image.open(self.image.path)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            
-            thumb_io = BytesIO()
-            img.save(thumb_io, format='JPEG', quality=30)
-            
-            file_name = self.image.name.split('/')[-1]
-            self.thumbnail.save(file_name, File(thumb_io), save=False)
-            
+    
     def get_thumbnail(self):
-        if not self.thumbnail:
-            self.set_thumbnail()
         return self.thumbnail.url
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    # recursive comment reply system
+    # parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replies', null=True, blank=True)
+    
+    like = models.ManyToManyField(User, related_name='like_comments', blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return self.content

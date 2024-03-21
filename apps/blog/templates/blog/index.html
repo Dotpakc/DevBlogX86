@@ -79,8 +79,12 @@
       })
       .catch((error) => {
         console.error('Error:', error);
+          // Redirect to the login page
+        window.location.href = "{% url 'members:login' %}";
       });
   }
+
+
 </script>
 {% endblock %}
   
