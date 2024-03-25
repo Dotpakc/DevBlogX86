@@ -10,8 +10,9 @@
   </head>
   <body>
 
-    
-
+    {% if user.is_superuser %}
+    <a href="/admin" class="btn btn-primary">Admin</a>
+    {% endif %}
 
     {% include '_include_blocks/_nav_block.html' %}
 
