@@ -18,3 +18,10 @@ class Profile(models.Model):
     
     def __str__(self):
         return self.user.username
+    
+    
+    def get_avatar(self):
+        if self.avatar:
+            return self.avatar.url
+        else:
+            return 'https://www.gravatar.com/avatar/{}?d=identicon'.format(self.user.username)

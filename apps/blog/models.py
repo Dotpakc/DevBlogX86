@@ -22,7 +22,8 @@ class Post(models.Model):
         processors=[ ResizeToFill(800, 400),
                     SmartCrop(800, 400)],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 60},
+        )
     thumbnail = ImageSpecField(
         source='image',
         processors=[Thumbnail(400, 200)],
@@ -41,6 +42,12 @@ class Post(models.Model):
     
     def get_thumbnail(self):
         return self.thumbnail.url
+    
+    def get_image(self):
+        if self.image:
+            return self.image.url
+        else:
+            return 'https://via.placeholder.com/800x400.jpg'
 
 
 class Comment(models.Model):

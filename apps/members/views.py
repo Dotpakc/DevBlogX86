@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 #pagination
 from django.core.paginator import Paginator
+
+
 
 from .models import Profile
 from .forms import ProfileForm
@@ -40,6 +42,7 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             profile = Profile(user=user)
+            profile.save()
             login(request, user)
             messages.success(request, 'You have been signed up')
             return redirect('main:index')
@@ -49,14 +52,16 @@ def signup_view(request):
     return render(request, 'members/signup.html', {'form': form})
 
 @login_required
-def profile_view(request):
-    posts = Post.objects.filter(author=request.user).prefetch_related('like').prefetch_related("author")
+def profile_view(request, pk):
+    profile = get_object_or_404(Profile, pk=pk)
+    posts = Post.objects.filter(author=profile.user).prefetch_related('like').prefetch_related("author")
     #pagination
     paginator = Paginator(posts, 6)
     page_number = request.GET.get('page')
     posts = paginator.get_page(page_number)
     created_form = PostForm()
-    context = { 
+    context = {
+        'profile': profile,
         'posts': posts,
         'created_form': created_form,
     }

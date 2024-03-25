@@ -6,19 +6,15 @@
     <div class="flex my-10 align-items-center gap-10 align-items-center justify-center">
         <div class="w-1/3 bg-base-200 p-10 rounded-box ">
             <h1 class="text-3xl font-bold mb-4">Profile</h1>
-            <img src="{% if not user.profile.avatar %}
-            https://upload.wikimedia.org/wikipedia/ru/thumb/6/61/Rickrolling.gif/200px-Rickrolling.gif
-            {% else %}
-            {{ user.profile.avatar.url }}
-            {% endif %}" alt="Shoes" class="w-full max h-96 mb-4" />
-            <p class="text-gray-500 mb-4">Username: {{ user.username }}</p>
-            <p class="text-gray-500 mb-4">Email: {{ user.email }}</p>
+            <img src="{{ profile.get_avatar }}" alt="avatar" width="100%" class="rounded-full mb-4">
+            <p class="text-gray-500 mb-4">Username: {{ profile.user.username }}</p>
+            <p class="text-gray-500 mb-4">Email: {{ profile.user.email }}</p>
             <a href="{% url 'members:logout' %}" class="btn btn-primary">Logout</a>
             <a href="{% url 'members:profile_edit' %}" class="btn btn-secondary">Edit Profile</a>
         </div>
         <div class="w-2/3 bg-base-200 p-10 rounded-box">
             <h1 class="text-3xl font-bold mb-4">біографія</h1>
-            <p class="text-gray-500 mb-4">{{ user.profile.bio }}</p>
+            <p class="text-gray-500 mb-4">{{ profile.bio }}</p>
             
         </div>
     </div>

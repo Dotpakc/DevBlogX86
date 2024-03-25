@@ -16,14 +16,14 @@
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
-            <img alt="avatar" src="{% if not user.profile.avatar %}https://upload.wikimedia.org/wikipedia/ru/thumb/6/61/Rickrolling.gif/200px-Rickrolling.gif{% else %}{{ user.profile.avatar.url }}{% endif %}" />
+            <img alt="avatar" src="{{ user.profile.get_avatar }}" />
           </div>
         </div>
         <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 rounded-box w-52">
           <span class="p-2 text-sm text-primary">Hello, <b>{{ user.username }}</b></span>
           <hr class="my-2 border-base-100">
           <li>
-            <a class="justify-between" href="{% url 'members:profile' %}">
+            <a class="justify-between" href="{% url 'members:profile' user.profile.id %}">
               Profile
               <span class="badge">New</span>
             </a>

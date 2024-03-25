@@ -8,6 +8,11 @@
       
       <div class="card-body">
         <h2 class="card-title">{{ post.title }}</h2>
+        <span class="text-gray-500">{{ post.created_at|timesince }} тому</span>
+        <div class="flex items-center mt-4">
+          <img src="{{post.author.profile.get_avatar}}" alt="avatar" class="w-10 h-10 rounded-full" />
+          <h2 class="card-title ml-4">{{ post.author }}</h2>
+        </div>
       </a>
         <div class="card-actions justify-end">
           <button id="like_{{post.id}}" onclick='like({{post.id}})'  class="btn btn-square  text-white text-lg"><i class="fa-solid fa-heart {%if user in post.like.all %}text-red-500{%else%}text-white{%endif%}"></i>{{ post.like.count }}</button>
