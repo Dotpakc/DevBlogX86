@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['lol.ithillelcraft.com', 'localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://lol.ithillelcraft.com',
+    'https://lols.ithillelcraft.com',
     # Додайте сюди інші довірені домени, якщо потрібно
 ]
 
@@ -94,9 +94,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "devblogx86",
-        "USER": "devblogx86_user",
-        "PASSWORD": "1234",
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD": "1Qaz2wsx3edC19841984200920099",
         "HOST": "127.0.0.1",
         "PORT": "5432",
     }
