@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['lol.ithillelcraft.com', 'localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://lols.ithillelcraft.com',
+    'https://lol.ithillelcraft.com',
     # Додайте сюди інші довірені домени, якщо потрібно
 ]
 
