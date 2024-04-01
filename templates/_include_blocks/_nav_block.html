@@ -24,11 +24,11 @@
           <hr class="my-2 border-base-100">
           <li>
             <a class="justify-between" href="{% url 'members:profile' user.profile.id %}">
-              Profile
+              <span> <i class="fas fa-user"></i> Profile </span>
               <span class="badge">New</span>
             </a>
           </li>
-          <li><a href="{% url 'members:logout' %}">Logout</a></li>
+          <li><a href="{% url 'members:logout' %}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
         </ul>
       </div>
       {% else %}

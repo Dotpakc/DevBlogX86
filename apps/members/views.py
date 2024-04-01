@@ -61,6 +61,7 @@ def profile_view(request, pk):
     posts = paginator.get_page(page_number)
     created_form = PostForm()
     context = {
+        'is_owner': request.user == profile.user,
         'profile': profile,
         'posts': posts,
         'created_form': created_form,
