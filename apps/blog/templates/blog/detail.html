@@ -18,12 +18,17 @@
           <img src="{{post.author.profile.get_avatar}}" alt="avatar" class="w-12 rounded-full" />
           <div class="flex flex-col">
             <h2 class="card-title ml-4">{{ post.author }}</h2>
-            <p class="text-gray-500 ml-4">{{ post.author.profile.bio|truncatechars:50 }}</p>
+            <!-- <p class="text-gray-500 ml-4">{{ post.author.profile.bio|truncatechars:100|safe }}</p> -->
           </div>
         </div>
       </a>
     <p class="text-gray-500 mb-4">Дата: {{ post.created_at }}</p>
-    <p class="mb-4">{{ post.content }}</p>
+    <p class="mb-4">{{ post.content|safe }}</p>
+      <div>
+        {% autoescape off %}
+        {{ post.content }}
+        {% endautoescape %}
+      </div>
     <!-- <a href="{% url 'blog:index' %}" class="btn btn-primary">Назад</a> -->
     
     <hr class="my-4">
@@ -65,7 +70,9 @@
                     <span class="label-text">{{ field.label }}</span>
                   </label>
                {% if field.name == 'content' %}
-                <textarea class="textarea textarea-bordered" name="{{ field.name }}" placeholder="{{ field.label }}" rows="5">{{ field.value }}</textarea>
+               <div class="ck-content text-gray-700">
+                {{ field }}
+              </div>
                 {% elif field.name == 'image' %}
                 <input type="file" name="{{ field.name }}" class="file-input file-input-bordered file-input-accent  w-full max-w-xs" placeholder="{{ field.label }}" value="{{ field.value }}">
                 {% else %}

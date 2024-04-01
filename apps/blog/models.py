@@ -8,14 +8,15 @@ from django.contrib.auth.models import User
 from imagekit.models import ImageSpecField, ProcessedImageField
 from imagekit.processors import ResizeToFill, Thumbnail, SmartCrop
 
-
+from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 # Create your models here.
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts', null=True, blank=True, default=None)
         
     title = models.CharField(max_length=100)
-    content = models.TextField()
+    content = CKEditor5Field('Text', config_name='extends')
 
     image = ProcessedImageField(
         upload_to='posts',

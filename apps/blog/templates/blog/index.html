@@ -1,10 +1,40 @@
 {% extends 'base.html' %}
 {% block title %}Blog{% endblock %}
 
+{% block header %}
+{{created_form.media}}
+{% endblock %}
+
+
+
 {% block content %}
     <div class="my-4 rounded-lg bg-base-300 p-9 ">
+      
     <h1 class = "text-3xl font-bold mb-4">Blog</h1>
-    <a onclick="my_modal_4.showModal()" class="btn btn-primary">Create Post</a>
+    <div class="flex justify-between ">
+    <form method="get" action="{% url 'blog:search' %}">
+      <div class="label">
+        <span class="label-text">Search</span>
+      </div>
+      <label class="input input-bordered flex items-center gap-2">
+        <input name="q" type="text" class="grow" placeholder="Search" value="{{ request.GET.q }}">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" /></svg>
+      </label>
+    </form>
+    <form method="get" action="{% url 'blog:index' %}" class="flex gap-4">
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text">Sort by</span>
+        </div>
+        <select class="select select-bordered" onchange="this.form.submit()" name="sort_by">
+          <option value="n" {% if request.GET.sort_by == 'n' %}selected disabled{% endif %}>Newest</option>
+          <option value="p" {% if request.GET.sort_by == 'p' %}selected disabled{% endif %}>Popular</option>
+          <option value="o" {% if request.GET.sort_by == 'o' %}selected disabled{% endif %}>Oldest</option>
+        </select>
+      </label>
+    </form>
+    </div>
+    <!-- <a onclick="my_modal_4.showModal()" class="btn btn-primary">Create Post</a> -->
     <div class="my-4 border-b-2 border-gray-300 w-full"></div>
     <div class="grid grid-cols-3 gap-7">
         {% for post in all_posts %}
@@ -15,15 +45,18 @@
     </div>
     <div class="join align-center justify-center flex my-4">
       {% if all_posts.has_previous %}
-      <a href="?page=1" class="join-item btn">«</a>
-      <a href="?page={{ all_posts.previous_page_number }}" class="join-item btn">Page {{ all_posts.previous_page_number }}</a>
+      <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}" class="join-item btn">«</a>
+      {% endif %}
+
+      {% if all_posts.has_previous %}
+      <a href="?page={{ all_posts.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}" class="join-item btn">Page {{ all_posts.previous_page_number }}</a>
       {% endif %}
 
       <button class="join-item btn btn-primary">Page {{ all_posts.number }}</button>
 
       {% if all_posts.has_next %}
-      <a href="?page={{ all_posts.next_page_number }}" class="join-item btn">Page {{ all_posts.next_page_number }}</a>
-      <a href="?page={{ all_posts.paginator.num_pages }}" class="join-item btn">»</a>
+      <a href="?page={{ all_posts.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}" class="join-item btn">Page {{ all_posts.next_page_number }}</a>
+      <a href="?page={{ all_posts.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.sort_by %}&sort_by={{ request.GET.sort_by }}{% endif %}" class="join-item btn">»</a>
       
       {% endif %}
     </div>
@@ -41,21 +74,25 @@
       <form action="{% url 'blog:create' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="grid grid-cols-1 gap-6">
+          
         {% for field in created_form %}
           <div class="form-control">
               <label class="label">
                 <span class="label-text">{{ field.label }}</span>
               </label>
-           {% if field.name == 'content' %}
-            <textarea class="textarea textarea-bordered" name="{{ field.name }}" placeholder="{{ field.label }}" rows="5"></textarea>
-            {% elif field.name == 'image' %}
-            <input type="file" name="{{ field.name }}" class="file-input file-input-bordered file-input-accent  w-full max-w-xs" placeholder="{{ field.label }}">
-            {% else %}
-            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="input input-bordered" placeholder="{{ field.label }}">
-            {% endif %}
+                    {% if field.name == 'content' %}
+                    <div class="ck-content text-gray-700">
+                        {{ field }}
+                      </div>
+                      {% elif field.name == 'image' %}
+                      <input type="file" name="{{ field.name }}" class="file-input file-input-bordered file-input-accent  w-full max-w-xs" placeholder="{{ field.label }}">
+                      {% else %}
+                      <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="input input-bordered" placeholder="{{ field.label }}">
+                      {% endif %}
           </div>
         {% endfor %}
-        <button class="btn btn-primary">Create</button>
+        <button class="btn btn-primary" type="submit">Create</button>
+        <!-- <input type="submit" value="Submit article"> -->
       </div>
         
       </form>

@@ -25,4 +25,5 @@ urlpatterns = [ #google.com/
     path('members/', include('apps.members.urls')),#google.com/members/
     path('', include('apps.main.urls')),#google.com/
     path("__debug__/", include("debug_toolbar.urls")),
+    path("ckeditor5/", include('django_ckeditor_5.urls'), name="ck_editor_5_upload_file"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

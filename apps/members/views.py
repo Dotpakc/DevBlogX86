@@ -76,7 +76,7 @@ def profile_edit_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated')
-            return redirect('members:profile')
+            return redirect('members:profile', pk=profile.pk)
         else:
             messages.error(request, 'Error updating profile')
     else:

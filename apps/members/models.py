@@ -3,10 +3,12 @@ from django.db import models
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill, SmartCrop
 
+from ckeditor.fields import RichTextField
+
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='profile')
-    bio = models.TextField(blank=True, null=True)
+    bio = RichTextField(null=True, blank=True)
     avatar = ProcessedImageField(
         upload_to='posts',
         processors=[ ResizeToFill(200, 200)],
