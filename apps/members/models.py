@@ -17,11 +17,28 @@ class Profile(models.Model):
         blank=True,
         null=True)
     
+    followers = models.ManyToManyField('self', symmetrical=False, related_name='following', blank=True)
     
     def __str__(self):
         return self.user.username
     
+    def follow(self, profile):
+        self.followers.add(profile)
+        
+    def unfollow(self, profile):
+        self.followers.remove(profile)
+        
+    def is_following(self, profile):#це функція, яка перевіряє чи підписаний користувач на іншого користувача
+        return profile in self.followers.all()
     
+    def get_followers(self): #це функція, яка повертає всіх користувачів, які підписані на користувача
+        return self.followers.all()
+    
+    def get_following(self):#це функція, яка повертає всіх користувачів, на яких підписаний користувач
+        return Profile.objects.filter(followers=self)
+        # Profile.objects.filter(followers__in=[self])
+    
+
     def get_avatar(self):
         if self.avatar:
             return self.avatar.url

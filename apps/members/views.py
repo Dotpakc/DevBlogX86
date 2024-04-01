@@ -83,3 +83,20 @@ def profile_edit_view(request):
     else:
         form = ProfileForm(instance=profile)
     return render(request, 'members/profile_edit.html', {'form': form})
+
+
+@login_required
+def follow_view(request, pk):
+    profile = get_object_or_404(Profile, pk=pk)
+    if request.user != profile.user:
+        user_profile = request.user.profile
+        if user_profile.is_following(profile):
+            user_profile.unfollow(profile)
+            messages.info(request, 'You have unfollowed {}'.format(profile.user.username))
+        else:
+            user_profile.follow(profile)
+            messages.info(request, 'You have followed {}'.format(profile.user.username))
+    return redirect('members:profile', pk=pk)
+        
+        
+    return redirect('members:profile', pk=pk)

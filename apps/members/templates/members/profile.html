@@ -13,7 +13,7 @@
             <a href="{% url 'members:logout' %}" class="btn btn-primary">Logout</a>
             <a href="{% url 'members:profile_edit' %}" class="btn btn-secondary">Edit Profile</a>
             {% else %}
-            <a href="" class="btn btn-primary">Follow</a>
+            <a href="{% url 'members:follow'  profile.id %}" class="btn btn-primary">Follow</a>
             {% endif %}
         </div>
         <div class="w-2/3 bg-base-200 p-10 rounded-box">
