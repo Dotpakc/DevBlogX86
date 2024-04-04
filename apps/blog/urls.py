@@ -16,5 +16,5 @@ urlpatterns = [
         path('delete/<int:post_id>/', views.delete_view, name='delete'),    #google.com/blog/delete/1/
         path('update/<int:post_id>/', views.update_view, name='update'),    #google.com/blog/update/1/
     
-    
+        path('search/', views.search_view, name='search'),    #google.com/blog/search/
 ]           

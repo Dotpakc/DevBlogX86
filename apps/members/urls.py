@@ -11,4 +11,7 @@ urlpatterns = [
     path('profile/<int:pk>/', views.profile_view, name='profile'),
     
     path('profile/edit/', views.profile_edit_view, name='profile_edit'),
+    path('follow/<int:pk>/', views.follow_view, name='follow'),
+    
+    path('notifications/<uuid:pk>/', views.notification_view, name='notification'),
 ]

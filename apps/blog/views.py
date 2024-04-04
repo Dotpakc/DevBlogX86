@@ -5,22 +5,34 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 #pagination
 from django.core.paginator import Paginator
+#Q
+from django.db.models import Q, Count
 
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
+
+from apps.members.models import Notification
 
 # Create your views here.
 
 def index(request):
     # print(request.GET.get('page', 1))   
-    all_posts = Post.objects.all()
+    all_posts = Post.objects.all().prefetch_related("author").prefetch_related("like")
+    if request.GET.get('sort_by') == 'p':
+        all_posts = all_posts.annotate(like_count=Count('like')).order_by('-like_count')
+    elif request.GET.get('sort_by') == 'o':
+        all_posts = all_posts.order_by('created_at')
+    else:
+        all_posts = all_posts.order_by('-created_at')
+    
     paginator = Paginator(all_posts, 3)
     page = request.GET.get('page')
     all_posts_page = paginator.get_page(page)
 
+    
     context = {
         'all_posts': all_posts_page,
-        'created_form': PostForm()
+        'created_form': PostForm(),
     }
     return render(request, 'blog/index.html', context)
 
@@ -82,6 +94,13 @@ def like_view(request, post_id):
         else:
             post.like.add(request.user)
             user_like = True
+            
+        if request.user != post.author:
+            print('notification')
+            Notification().add_like(post, request.user)
+            
+            
+        
         return JsonResponse( {'like_count': post.like.count(), 'user_like': user_like} )
 
 
@@ -112,3 +131,26 @@ def comment_view(request, post_id):
         else:
             messages.error(request, 'Error creating comment')
     return redirect('blog:detail', post_id=post_id)
+
+def search_view(request):
+    if request.method == 'GET':
+        query = request.GET.get('q', "")
+        posts = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).prefetch_related("author").prefetch_related("like")
+        if request.GET.get('sort_by') == 'p':
+            all_posts = posts.annotate(like_count=Count('like')).order_by('-like_count')
+        elif request.GET.get('sort_by') == 'o':
+            all_posts = posts.order_by('created_at')
+        else:
+            all_posts = posts.order_by('-created_at')
+    
+        
+        paginator = Paginator(all_posts, 3)
+        page = request.GET.get('page')
+        all_posts_page = paginator.get_page(page)
+
+        context = {
+            'all_posts': all_posts_page,
+            'created_form': PostForm()
+        }
+        return render(request, 'blog/index.html', context)
+    return redirect('blog:index')
