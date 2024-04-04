@@ -11,6 +11,8 @@ from django.db.models import Q, Count
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 
+from apps.members.models import Notification
+
 # Create your views here.
 
 def index(request):
@@ -92,6 +94,13 @@ def like_view(request, post_id):
         else:
             post.like.add(request.user)
             user_like = True
+            
+        if request.user != post.author:
+            print('notification')
+            Notification().add_like(post, request.user)
+            
+            
+        
         return JsonResponse( {'like_count': post.like.count(), 'user_like': user_like} )
 
 

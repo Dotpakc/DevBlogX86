@@ -8,7 +8,7 @@ from django.core.paginator import Paginator
 
 
 
-from .models import Profile
+from .models import Profile, Notification
 from .forms import ProfileForm
 
 from apps.blog.models import Post
@@ -62,6 +62,9 @@ def profile_view(request, pk):
     created_form = PostForm()
     context = {
         'is_owner': request.user == profile.user,
+        'is_following': request.user.profile.is_following(profile),
+        'followers': profile.get_followers(),
+        'following': profile.get_following(),
         'profile': profile,
         'posts': posts,
         'created_form': created_form,
@@ -98,5 +101,10 @@ def follow_view(request, pk):
             messages.info(request, 'You have followed {}'.format(profile.user.username))
     return redirect('members:profile', pk=pk)
         
-        
-    return redirect('members:profile', pk=pk)
+    
+@login_required
+def notification_view(request, pk):
+    notification = get_object_or_404(Notification, pk=pk)
+    notification.is_read = True
+    notification.save()
+    return redirect(notification.url)

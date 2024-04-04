@@ -13,12 +13,59 @@
             <a href="{% url 'members:logout' %}" class="btn btn-primary">Logout</a>
             <a href="{% url 'members:profile_edit' %}" class="btn btn-secondary">Edit Profile</a>
             {% else %}
-            <a href="{% url 'members:follow'  profile.id %}" class="btn btn-primary">Follow</a>
+              {% if is_following %}
+                <a href="{% url 'members:follow'  profile.id %}" class="btn btn-accent">Unfollow</a>
+              {% else %}
+                <a href="{% url 'members:follow'  profile.id %}" class="btn btn-primary">Follow</a>
+              {% endif %}
             {% endif %}
         </div>
-        <div class="w-2/3 bg-base-200 p-10 rounded-box">
+        <div class="w-2/3 ">
+          <div class="bg-base-200 p-10 rounded-box mb-4">
             <h1 class="text-3xl font-bold mb-4">біографія</h1>
             <p class="text-gray-500 mb-4">{{ profile.bio|safe }}</p>
+          </div>
+          <div class="bg-base-200 p-10 rounded-box">
+            <h1 class="text-3xl font-bold mb-4">Followers</h1>
+
+              <div class="flex items-center space-x-4">
+                {% if followers.count == 0 %}
+                  <span class="text-gray-500">No followers</span>
+                {% endif %}
+                {% for follower in followers %}
+                  {% if forloop.counter <= 3 %}
+                      <a href="{% url 'members:profile' follower.id %}">
+                      <img src="{{ follower.get_avatar }}" alt="avatar" class="h-10 w-10 rounded-full ring-2 ring-white">
+                      </a>
+                  {% endif %}
+
+                {% endfor %}
+                {% if followers.count > 3 %}
+                 <span class="text-gray-500">and {{ followers.count|add:"-3" }} more</span>
+                {% endif %}
+            </div>
+          </div>
+
+          <div class="bg-base-200 p-10 rounded-box mt-4">
+            <h1 class="text-3xl font-bold mb-4">Followers</h1>
+            <div class="flex items-center space-x-4">
+              {% if following.count == 0 %}
+                <span class="text-gray-500">No following</span>
+              {% endif %}
+
+              {% for follower in following %}
+                {% if forloop.counter <= 3 %}
+                  <a href="{% url 'members:profile' follower.id %}">
+                    <img src="{{ follower.get_avatar }}" alt="avatar" class="h-10 w-10 rounded-full ring-2 ring-white">
+                  </a>
+                {% endif %}
+
+              {% endfor %}
+              {% if following.count > 3 %}
+                <span class="text-gray-500">and {{ following.count|add:"-3" }} more</span>
+              {% endif %}
+            </div>
+          </div>  
             
         </div>
     </div>

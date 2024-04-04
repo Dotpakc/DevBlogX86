@@ -13,6 +13,41 @@
       
 
       {% if user.is_authenticated %}
+      <!-- notification icon-->
+     
+        
+      
+      <div class="dropdown dropdown-end">
+        <div class="indicator">
+          <span class="indicator-item badge badge-secondary"></span> 
+        <div tabindex="1" role="button" class="btn btn-ghost btn-circle">
+          <i class="fas fa-bell"></i>
+        </div>
+      </div>
+        <ul tabindex="1" class="mt-6 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-300 rounded-box w-80">
+          <span class="p-2 text-sm text-primary">Notifications</span>
+          <hr class="my-2 border-base-100">
+          {% if user.notifications.all.count == 0 %}
+              <span class="p-2 text-gray-500">No notifications</span>
+          {% endif %}
+
+            {% for notification in user.notifications.all|slice:"0:10" %}
+              <li class="{% if not notification.is_read %}bg-primary{% endif %} rounded-box mb-2">
+                <a class="justify-between p-2" href="{% url 'members:notification' notification.id %}">
+                 
+                  <span>
+                    <i class="fas fa-{{ notification.get_icon }}"></i>
+                    
+                    {{ notification.message }} </span>
+                  {% if not notification.is_read %}
+                    <span class="badge">New</span>
+                  {% endif %}
+                </a>
+              </li>
+            {% endfor %}
+        </ul>
+      </div>
+
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
