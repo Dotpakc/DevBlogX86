@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     "debug_toolbar",
     'imagekit',
+    'mptt',
     
     'apps.main',
     'apps.blog',

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Catalog{% endblock %}
+
+{% block content %}
+    <h1 class="text-2xl font-bold text-center">Catalog</h1>
+    <h2 class="text-2xl font-bold text-center">{{category.title}}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+        {% for catalog in object_list %}
+        <a href="{% url 'catalog:product_by_category' catalog.slug %}">
+            <div class="card">
+                <div class="card-body hover:shadow-lg transition duration-300 rounded-lg hover:scale-105">
+                    <img src="{{ catalog.image.url }}" alt="{{ catalog.title }}" class="w-full h-48 object-cover object-center rounded-lg">
+                    <h2 class="card-title">{{ catalog.title }}</h2>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}
