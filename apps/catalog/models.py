@@ -7,6 +7,8 @@ from django.contrib.admin import display
 from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFill
 
+from django_ckeditor_5.fields import CKEditor5Field
+
 from mptt.models import MPTTModel, TreeForeignKey
 
 class Category(MPTTModel):
@@ -52,7 +54,7 @@ class Product(models.Model):
     
     title = models.CharField(max_length=255, verbose_name='Назва')
     slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
-    description = models.TextField(verbose_name='Опис', blank=True, null=True)
+    description = CKEditor5Field(verbose_name='Опис', blank=True, null=True)
     
     quantity = models.PositiveIntegerField(verbose_name='Кількість', default=0)
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Ціна')
@@ -75,7 +77,7 @@ class Product(models.Model):
         
     def __str__(self):
         return self.title
-    
+        
     
 class ProductCategory(models.Model):
     product = models.ForeignKey(

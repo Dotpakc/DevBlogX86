@@ -22,9 +22,9 @@
     <div class="mt-4">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {% for product in products %}
-            <a href="{% url 'catalog:product_detail' product.slug %}">
+            <a href="">
                 <div class="card hover shadow-lg transition duration-300 rounded-lg hover:scale-105 bg-base-200">
-                    <img src="{{ product.image.url }}" alt="{{ product.title }}" class="w-full object-contain object-center rounded-lg">
+                    <img src="{{ product.images.url }}" alt="{{ product.title }}" class="w-full object-contain object-center rounded-lg">
                     <div class="justify-center items-center p-2 card-body text-center">
                         <p>{{ product.title }}</p>
                         <p class="text-sm text-gray-500">{{ product.price }}</p>
