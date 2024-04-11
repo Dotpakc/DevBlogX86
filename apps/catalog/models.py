@@ -77,7 +77,9 @@ class Product(models.Model):
         
     def __str__(self):
         return self.title
-        
+    
+    def main_image(self):
+        return self.images.filter(is_main=True).first()
     
 class ProductCategory(models.Model):
     product = models.ForeignKey(
