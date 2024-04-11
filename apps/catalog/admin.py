@@ -13,7 +13,8 @@ class ProductCategoryInline(admin.TabularInline):
     
 class ImageInline(admin.TabularInline):
     model = Image
-    fields = ('product', 'image', 'is_main')
+    fields = ('image_tag','product', 'image', 'is_main'),
+    readonly_fields = ('image_tag',)
     extra = 1
 
 

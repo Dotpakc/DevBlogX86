@@ -1,6 +1,8 @@
 import uuid
 
 from django.db import models
+from django.utils.safestring import mark_safe
+from django.contrib.admin import display
 
 from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFill
@@ -145,3 +147,8 @@ class Image(models.Model):
         
     def __str__(self):
         return self.product.title
+    
+    @display(description='Зображення')
+    def image_tag(self):
+        if self.image:
+            return mark_safe(f'<img src="{self.image.url}" height="100" />')
