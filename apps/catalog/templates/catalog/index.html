@@ -5,18 +5,35 @@
 {% block content %}
     <h1 class="text-2xl font-bold text-center">Catalog</h1>
     <h2 class="text-2xl font-bold text-center">{{category.title}}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+    <div class="grid grid-cols-5 md:grid-cols-8 lg:grid-cols-8 gap-4 mt-4">
         {% for catalog in object_list %}
         <a href="{% url 'catalog:product_by_category' catalog.slug %}">
-            <div class="card">
-                <div class="card-body hover:shadow-lg transition duration-300 rounded-lg hover:scale-105">
-                    <img src="{{ catalog.image.url }}" alt="{{ catalog.title }}" class="w-full h-48 object-cover object-center rounded-lg">
-                    <h2 class="card-title">{{ catalog.title }}</h2>
+            <div class="card hover:shadow-lg transition duration-300 rounded-lg hover:scale-105 bg-base-200">
+                <img src="{{ catalog.image.url }}" alt="{{ catalog.title }}" class="w-full object-contain object-center rounded-lg">
+                <div class="justify-center items-center p-2 card-body text-center">
+                    <p>{{ catalog.title }}</p>
                 </div>
             </div>
         </a>
         {% endfor %}
     </div>
-
+<hr class="my-4">
+{{ products}}
+    <div class="mt-4">
+        <div class="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+            {% for product in products %}   
+            
+            <a href="{% url 'catalog:product_detail' product.slug %}">
+                <div class="card hover shadow-lg transition duration-300 rounded-lg hover:scale-105 bg-base-200">
+                    <img src="{{ product.main_image.thumbnail.url }}" alt="{{ product.title }}" class="w-full object-contain object-center rounded-lg">
+                    <div class="justify-center items-center p-2 card-body text-center">
+                        <p>{{ product.title }}</p>
+                        <p class="text-sm text-gray-500">{{ product.price }}</p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
 
 {% endblock %}
