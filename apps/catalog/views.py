@@ -34,4 +34,16 @@ class ProductByCategoryView(ListView):
         context['products'] = self.products
         return context
     
-        
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
+    
+    def get_queryset(self):
+        return Product.objects.prefetch_related('images')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['main_image'] = self.object.main_image()
+        return context
