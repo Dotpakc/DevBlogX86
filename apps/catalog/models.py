@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 from django.contrib.admin import display
 
 from imagekit.models import ProcessedImageField, ImageSpecField
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToFit, ResizeToFill, ResizeToCover
 
 from django_ckeditor_5.fields import CKEditor5Field
 
@@ -20,7 +20,7 @@ class Category(MPTTModel):
     image = ProcessedImageField(
         verbose_name='Зображення',
         upload_to='categories/',
-        processors=[ResizeToFill(820, 440)],
+        processors=[ResizeToFit(820, 440)],
         format='WEBP',
         options={'quality': 90},
         blank=True,
@@ -128,7 +128,7 @@ class Image(models.Model):
     
     thumbnail = ImageSpecField(
         source='image',
-        processors=[ResizeToFill(300, 200)],
+        processors=[ResizeToCover(300, 300)],
         format='WEBP',
         options={'quality': 50},
     )
