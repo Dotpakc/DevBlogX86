@@ -84,6 +84,13 @@ class Product(models.Model):
             return main_image
         return self.images.first()
     
+    def main_category(self):
+        main_category = self.category.filter(productcategory__is_main=True).first()
+        if main_category:
+            return main_category
+        return self.category.first()
+    
+    
 class ProductCategory(models.Model):
     product = models.ForeignKey(
         to = Product,
