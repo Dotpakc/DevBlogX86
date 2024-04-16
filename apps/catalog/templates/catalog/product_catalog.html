@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Catalog{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold">{{category.title}}</h1>
+    <div class="grid grid-cols-5 md:grid-cols-8 lg:grid-cols-8 gap-4 mt-4">
+        {% for catalog in object_list %}
+        <a href="{% url 'catalog:product_by_category' catalog.slug %}">
+            <div class="card hover:shadow-lg transition duration-300 rounded-lg hover:scale-105 bg-base-200">
+                <img src="{{ catalog.image.url }}" alt="{{ catalog.title }}" class="w-full object-contain object-center rounded-lg">
+                <div class="justify-center items-center p-2 card-body text-center">
+                    <p>{{ catalog.title }}</p>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+<hr class="my-4">
+    <div class="mt-4">
+        <div class="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
+            {% for product in products %}   
+            
+            <a href="{% url 'catalog:product_detail' product.slug %}">
+                <div class="card hover shadow-lg transition duration-300 rounded-lg hover:scale-105 bg-base-200">
+                    <div style="height: 200px;">
+                        <div class="absolute top-0 right-0 p-2 bg-success text-white rounded-bl-lg font-bold hover:bg-error hover:text-white transition duration-300">👀</div>
+                    <img src="{{ product.main_image.thumbnail.url }}" alt="{{ product.title }}" class="w-full object-contain object-center rounded-lg h-full">
+                    </div>
+                    <hr style="height: 2px; border: none; background-color: #0077ff49;">
+                    <div class="justify-center items-center p-2 card-body text-center">
+                        <span class="text-lg">{{ product.title }}</span>
+                        <span class="text-lg text-success font-bold">{{ product.price }} грн</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

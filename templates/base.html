@@ -49,6 +49,21 @@
 
 
     <div class="container mx-auto">
+      {% if breadcrumbs %}
+      <div class="text-sm breadcrumbs mt-4">
+        <ul>
+          <li><a href="{% url 'main:index' %}" style="text-decoration: none;"><i class="fas fa-home mr-1"></i></a></li>
+          {% for url, key in breadcrumbs.items %}
+            {% if url == "current" %}
+              <li class="text-gray-400">{{ key }}</li>
+            {% else %}
+              <li><a href="{{url}}">{{ key  }}</a></li>
+            {% endif %}
+          {% endfor %}
+          
+        </ul>
+      </div>
+      {% endif %}
     {% block content %}{% endblock %}
     </div>
   </body>
