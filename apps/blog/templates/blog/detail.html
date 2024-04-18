@@ -76,7 +76,13 @@
                 {% elif field.name == 'image' %}
                 <input type="file" name="{{ field.name }}" class="file-input file-input-bordered file-input-accent  w-full max-w-xs" placeholder="{{ field.label }}" value="{{ field.value }}">
                 {% else %}
-                <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="input input-bordered" placeholder="{{ field.label }}" value="{{ field.value }}">
+                <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="input input-bordered" placeholder="{{ field.label }}" {% if field.value %} value="{% if field.name == 'tags' %}{% for tag in field.value %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}{% else %}{{ field.value }}{% endif %}{% endif %}">
+                {% endif %}
+                {% if field.help_text %}
+                <p class="text-gray-500 text-xs">{{ field.help_text }}</p>
+                {% endif %}
+                {% if field.errors %}
+                <p class="text-red-500 text-xs">{{ field.errors }}</p>
                 {% endif %}
               </div>
             {% endfor %}

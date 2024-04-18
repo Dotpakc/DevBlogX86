@@ -57,6 +57,7 @@ def create_view(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
+            form.save_m2m()
             messages.success(request, 'Post created successfully')
             return redirect('blog:detail' , post_id=post.id)
         else:
@@ -135,7 +136,7 @@ def comment_view(request, post_id):
 def search_view(request):
     if request.method == 'GET':
         query = request.GET.get('q', "")
-        posts = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query)).prefetch_related("author").prefetch_related("like")
+        posts = Post.objects.filter(Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__icontains=query)).prefetch_related("author").prefetch_related("like")
         if request.GET.get('sort_by') == 'p':
             all_posts = posts.annotate(like_count=Count('like')).order_by('-like_count')
         elif request.GET.get('sort_by') == 'o':

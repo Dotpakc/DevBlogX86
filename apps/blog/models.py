@@ -10,6 +10,8 @@ from imagekit.processors import ResizeToFill, Thumbnail, SmartCrop
 
 from ckeditor.fields import RichTextField
 from django_ckeditor_5.fields import CKEditor5Field
+from taggit.managers import TaggableManager
+
 
 # Create your models here.
 class Post(models.Model):
@@ -31,6 +33,7 @@ class Post(models.Model):
         format='JPEG',
         options={'quality': 60})
     like = models.ManyToManyField(User, related_name='like_posts', blank=True)
+    tags = TaggableManager()
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
