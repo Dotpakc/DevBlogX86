@@ -6,13 +6,17 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
         <div>
             <div class="card">
-                <img src="{{ main_image.image.url }}" alt="{{ product.title }}" class="w-full object-contain object-center rounded-lg">
+                <a href="{{ main_image.image.url }}" class="MagicZoom w-full object-contain object-center rounded-lg" id="motorbike" data-options="selectorTrigger: hover; transitionEffect: true"><img src="{{ main_image.image.url }}" class="w-full object-contain object-center rounded-lg"></a>
+
+                <!-- <img src="{{ main_image.image.url }}" alt="{{ product.title }}" class="w-full object-contain object-center rounded-lg"> -->
             </div>
             <div class = "mt-4">
                 <div class="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4">
                     {% for image in product.images.all %}
                     <div class="card">
-                        <img src="{{ image.thumbnail.url }}" alt="{{ product.title }}" class="w-full object-contain object-center rounded-lg">
+                        <a data-zoom-id="motorbike" href="{{ image.image.url }}" data-image="{{ image.thumbnail.url }}" class="w-full object-contain object-center rounded-lg"><img src="{{ image.thumbnail.url }}" class="w-full object-contain object-center rounded-lg"></a>
+                      
+                        <!-- <img src="{{ image.thumbnail.url }}" alt="{{ product.title }}" class="w-full object-contain object-center rounded-lg"> -->
                     </div>
                     {% endfor %}
                 </div>
