@@ -52,11 +52,13 @@ INSTALLED_APPS = [
     "debug_toolbar",
     'imagekit',
     'mptt',
+    "taggit",
     
     'apps.main',
     'apps.blog',
     'apps.members',
     'apps.catalog',
+    'apps.order',
 ]
 
 MIDDLEWARE = [

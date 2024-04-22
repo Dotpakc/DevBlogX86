@@ -7,7 +7,7 @@ from django_ckeditor_5.widgets import CKEditor5Widget
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'content', 'image')
+        fields = ('title', 'content', 'image', 'tags')
         # widgets = {
         #     'content': CKEditor5Widget(
         #     attrs={"class": "django_ckeditor_5", "config_name": "extends"})
