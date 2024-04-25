@@ -47,4 +47,20 @@ class CartDeleteHandler(View):
         cart.delete()
         messages.success(request, 'Товар видалено з кошика')
         return redirect('order:cart')
+
+class CartClearHandler(View):
+    def get(self, request):
+        Cart.objects.filter(user=request.user).delete()
+        messages.success(request, 'Кошик очищено')
+        return redirect('order:cart')
     
+    
+class CheckoutHandler(View):
+    def get(self, request):
+        cart = Cart.objects.filter(user=request.user).order_by('product__price')
+        total_cost = sum([item.get_total() for item in cart])
+        return render(request, 'order/order_create.html', {'cart': cart, 'total_cost': total_cost})
+    
+    def post(self, request):
+        print(request.POST)
+        return redirect('order:cart')
