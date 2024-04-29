@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'imagekit',
     'mptt',
     "taggit",
+    'phonenumber_field',
     
     'apps.main',
     'apps.blog',
