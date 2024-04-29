@@ -1,5 +1,7 @@
 from django.db import models
 
+from phonenumber_field.modelfields import PhoneNumberField
+
 from apps.catalog.models import Product
 
 # Create your models here.
@@ -25,7 +27,7 @@ class Order(models.Model):
     STATUS_CHOUCES = (
         ('in_progress', 'В обробці'),
         ('sent', 'Відправлено'),
-        ('completed', 'Завершено')
+        ('completed', 'Завершено'),
         ('canceled', 'Скасовано')
     )
     
@@ -38,7 +40,7 @@ class Order(models.Model):
 
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=20)
+    phone = PhoneNumberField(verbose_name='Phone')
     email = models.EmailField()
     delivery = models.CharField(max_length=50)
     address = models.CharField(max_length=250)
