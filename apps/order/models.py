@@ -37,6 +37,7 @@ class Order(models.Model):
     )
     
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Total price', default=9999999)
 
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
