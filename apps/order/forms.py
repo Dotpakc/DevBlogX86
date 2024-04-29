@@ -7,3 +7,5 @@ class CartForm(forms.ModelForm):
     class Meta:
         model = Cart
         fields = ('quantity', 'product')
+        
+        
