@@ -10,8 +10,7 @@
             <p class="text-gray-500 mb-4">Username: {{ profile.user.username }}</p>
             <p class="text-gray-500 mb-4">Email: {{ profile.user.email }}</p>
             {% if is_owner %}
-            <a href="{% url 'members:logout' %}" class="btn btn-primary">Logout</a>
-            <a href="{% url 'members:profile_edit' %}" class="btn btn-secondary">Edit Profile</a>
+
             {% else %}
               {% if is_following %}
                 <a href="{% url 'members:follow'  profile.id %}" class="btn btn-accent">Unfollow</a>
@@ -21,51 +20,79 @@
             {% endif %}
         </div>
         <div class="w-2/3 ">
-          <div class="bg-base-200 p-10 rounded-box mb-4">
-            <h1 class="text-3xl font-bold mb-4">біографія</h1>
-            <p class="text-gray-500 mb-4">{{ profile.bio|safe }}</p>
-          </div>
-          <div class="bg-base-200 p-10 rounded-box">
-            <h1 class="text-3xl font-bold mb-4">Followers</h1>
-
-              <div class="flex items-center space-x-4">
-                {% if followers.count == 0 %}
-                  <span class="text-gray-500">No followers</span>
-                {% endif %}
-                {% for follower in followers %}
-                  {% if forloop.counter <= 3 %}
-                      <a href="{% url 'members:profile' follower.id %}">
-                      <img src="{{ follower.get_avatar }}" alt="avatar" class="h-10 w-10 rounded-full ring-2 ring-white">
-                      </a>
-                  {% endif %}
-
-                {% endfor %}
-                {% if followers.count > 3 %}
-                 <span class="text-gray-500">and {{ followers.count|add:"-3" }} more</span>
-                {% endif %}
+          <div role="tablist" class="tabs tabs-lifted ">
+            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="Основа інформація" checked />
+            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-5"> 
+                            <div class="bg-base-200 p-10 rounded-box mb-4">
+                              <h1 class="text-3xl font-bold mb-4">біографія</h1>
+                              <p class="text-gray-500 mb-4">{{ profile.bio|safe }}</p>
+                            </div> 
+                            <div class="bg-base-200 p-10 rounded-box">
+                              <h1 class="text-3xl font-bold mb-4">Followers</h1>
+                  
+                                <div class="flex items-center space-x-4">
+                                  {% if followers.count == 0 %}
+                                    <span class="text-gray-500">No followers</span>
+                                  {% endif %}
+                                  {% for follower in followers %}
+                                    {% if forloop.counter <= 3 %}
+                                        <a href="{% url 'members:profile' follower.id %}">
+                                        <img src="{{ follower.get_avatar }}" alt="avatar" class="h-10 w-10 rounded-full ring-2 ring-white">
+                                        </a>
+                                    {% endif %}
+                  
+                                  {% endfor %}
+                                  {% if followers.count > 3 %}
+                                  <span class="text-gray-500">and {{ followers.count|add:"-3" }} more</span>
+                                  {% endif %}
+                              </div>
+                            </div>
+                  
+                            <div class="bg-base-200 p-10 rounded-box mt-4">
+                              <h1 class="text-3xl font-bold mb-4">Followers</h1>
+                              <div class="flex items-center space-x-4">
+                                {% if following.count == 0 %}
+                                  <span class="text-gray-500">No following</span>
+                                {% endif %}
+                  
+                                {% for follower in following %}
+                                  {% if forloop.counter <= 3 %}
+                                    <a href="{% url 'members:profile' follower.id %}">
+                                      <img src="{{ follower.get_avatar }}" alt="avatar" class="h-10 w-10 rounded-full ring-2 ring-white">
+                                    </a>
+                                  {% endif %}
+                  
+                                {% endfor %}
+                                {% if following.count > 3 %}
+                                  <span class="text-gray-500">and {{ following.count|add:"-3" }} more</span>
+                                {% endif %}
+                              </div>
+                            </div>  
             </div>
-          </div>
+          
+            
+            
+            {% if is_owner %}
+            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="Налаштування"  />
+            <div role="tabpanel" class="tab-content bg-base-200 border-base-300 rounded-box p-6">
 
-          <div class="bg-base-200 p-10 rounded-box mt-4">
-            <h1 class="text-3xl font-bold mb-4">Followers</h1>
-            <div class="flex items-center space-x-4">
-              {% if following.count == 0 %}
-                <span class="text-gray-500">No following</span>
-              {% endif %}
-
-              {% for follower in following %}
-                {% if forloop.counter <= 3 %}
-                  <a href="{% url 'members:profile' follower.id %}">
-                    <img src="{{ follower.get_avatar }}" alt="avatar" class="h-10 w-10 rounded-full ring-2 ring-white">
-                  </a>
-                {% endif %}
-
-              {% endfor %}
-              {% if following.count > 3 %}
-                <span class="text-gray-500">and {{ following.count|add:"-3" }} more</span>
-              {% endif %}
+              <div class="bg-base-200 p-10 rounded-box mb-4">
+                <h1 class="text-3xl font-bold mb-4 text-secondary">Settings</h1>
+                <hr class="my-4 border-base-300">
+                <h4 class="text-xl font-bold mb-4">Change Password</h4>
+                <a href="" class="btn btn-primary">Change Password</a>
+                <hr class="my-4">
+                <h4 class="text-xl font-bold mb-4">Edit Profile</h4>
+                <a href="{% url 'members:profile_edit' %}" class="btn btn-secondary">Edit Profile</a>
+                <hr class="my-4">
+                <h4 class="text-xl font-bold mb-4">Logout</h4>
+                <a href="{% url 'members:logout' %}" class="btn btn-accent">Logout</a>
+                
+              </div>
             </div>
-          </div>  
+            {% endif %}
+        </div>
+          
             
         </div>
     </div>
@@ -75,27 +102,33 @@
         <a onclick="my_modal_4.showModal()" class="btn btn-primary">Create Post</a>
 
         {% endif %}
-        <div class="grid grid-cols-3 gap-7">
-            {% for post in posts %}
-        
-              {% include 'blog/_include_blocks/_card_post.html' with post=post is_control=is_owner %}
-    
-            {% endfor %}
-        </div>
-        <div class="join align-center justify-center flex my-4">
-          {% if posts.has_previous %}
-          <a href="?page=1" class="join-item btn">«</a>
-          <a href="?page={{ posts.previous_page_number }}" class="join-item btn">Page {{ posts.previous_page_number }}</a>
-          {% endif %}
-    
-          <button class="join-item btn btn-primary">Page {{ posts.number }}</button>
-    
-          {% if posts.has_next %}
-          <a href="?page={{ posts.next_page_number }}" class="join-item btn">Page {{ posts.next_page_number }}</a>
-          <a href="?page={{ posts.paginator.num_pages }}" class="join-item btn">»</a>
+        <hr class="my-4 border-base-300">
+        {% if posts %}
+          <div class="grid grid-cols-3 gap-7">
+              {% for post in posts %}
           
-          {% endif %}
-        </div>
+                {% include 'blog/_include_blocks/_card_post.html' with post=post is_control=is_owner %}
+      
+              {% endfor %}
+          </div>
+          <div class="join align-center justify-center flex my-4">
+            {% if posts.has_previous %}
+            <a href="?page=1" class="join-item btn">«</a>
+            <a href="?page={{ posts.previous_page_number }}" class="join-item btn">Page {{ posts.previous_page_number }}</a>
+            {% endif %}
+      
+            <button class="join-item btn btn-primary">Page {{ posts.number }}</button>
+      
+            {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}" class="join-item btn">Page {{ posts.next_page_number }}</a>
+            <a href="?page={{ posts.paginator.num_pages }}" class="join-item btn">»</a>
+            
+            {% endif %}
+          </div>
+        {% else %}
+          <h3 class="text-gray-500 text-center text-2xl">No posts</h3>
+        {% endif %}
+          
     </div>
 
 
