@@ -1,8 +1,10 @@
 asgiref==3.7.2
+crispy-daisyui==0.2.0
 Django==5.0.2
 django-appconf==1.0.6
 django-ckeditor==6.7.1
 django-ckeditor-5==0.2.12
+django-crispy-forms==2.1
 django-debug-toolbar==4.3.0
 django-imagekit==5.0.0
 django-js-asset==2.2.0

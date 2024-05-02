@@ -80,7 +80,7 @@
                 <h1 class="text-3xl font-bold mb-4 text-secondary">Settings</h1>
                 <hr class="my-4 border-base-300">
                 <h4 class="text-xl font-bold mb-4">Change Password</h4>
-                <a href="" class="btn btn-primary">Change Password</a>
+                <a href="{% url 'members:change_password' %}" class="btn btn-secondary">Change Password</a>
                 <hr class="my-4">
                 <h4 class="text-xl font-bold mb-4">Edit Profile</h4>
                 <a href="{% url 'members:profile_edit' %}" class="btn btn-secondary">Edit Profile</a>

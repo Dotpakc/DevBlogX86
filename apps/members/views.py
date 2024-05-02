@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.views import View
+
 #pagination
 from django.core.paginator import Paginator
 
@@ -108,3 +111,22 @@ def notification_view(request, pk):
     notification.is_read = True
     notification.save()
     return redirect(notification.url)
+
+
+
+
+class ChangePasswordView(View, LoginRequiredMixin):
+    def get(self, request):
+        form = PasswordChangeForm(user=request.user)
+        return render(request, 'members/profile_change_password.html', {'form': form})
+    
+    def post(self, request):
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Password updated')
+            return redirect('members:profile', pk=request.user.profile.pk)
+        else:
+            messages.error(request, 'Error updating password')
+            return render(request, 'members/profile_change_password.html', {'form': form})
