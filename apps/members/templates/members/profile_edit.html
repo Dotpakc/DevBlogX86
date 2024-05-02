@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load daisyui_filters %}
+
 {% block title %} Edit Profile {% endblock %}
 
 {% block content %}
@@ -7,7 +9,9 @@
         <div class="bg-base-200 p-10 rounded-box">
             <form action="{% url 'members:profile_edit' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="grid grid-cols-1 gap-6">
+                {{ form|crispy }}
+                <button class="btn btn-primary">Edit</button>
+                {% comment %} <div class="grid grid-cols-1 gap-6">
 
                     <div class="form-control">
                       <label class="label">
@@ -18,8 +22,8 @@
 
                     {{form.bio}}
 
-                  <button class="btn btn-primary">Edit</button>
-                </div>
+                  {% endcomment %}
+                {% comment %} </div> {% endcomment %}
             </form>
         </div>
     </div>

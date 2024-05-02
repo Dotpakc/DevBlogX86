@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'mptt',
     "taggit",
     'phonenumber_field',
+    'crispy_forms',
+    'crispy_daisyui',   
     
     'apps.main',
     'apps.blog',
@@ -157,6 +159,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'members:login'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "daisyui"
+
+CRISPY_TEMPLATE_PACK = "daisyui"
 
 
 CKEDITOR_CONFIGS = {
