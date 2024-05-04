@@ -1,10 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from django.views.generic import View, ListView
 from django.contrib import messages
+from django.db import transaction
 
-from .models import Cart
-from .forms import CartForm
+from .models import Cart, Order, OrderProduct
+from .forms import CartForm, OrderForm
+
+def get_cart_data(user):
+    cart = Cart.objects.filter(user=user).prefetch_related('product').prefetch_related('product__images')
+    total_price = sum([item.get_total() for item in cart])
+    return {'cart': cart, 'total_price': total_price}
 
 class CartAddHandler(View):
     def post(self, request):
@@ -47,4 +53,53 @@ class CartDeleteHandler(View):
         cart.delete()
         messages.success(request, 'Товар видалено з кошика')
         return redirect('order:cart')
+
+class CartClearHandler(View):
+    def get(self, request):
+        Cart.objects.filter(user=request.user).delete()
+        messages.success(request, 'Кошик очищено')
+        return redirect('order:cart')
     
+    
+class CheckoutHandler(View):
+    def get(self, request):
+        cart = Cart.objects.filter(user=request.user).order_by('product__price')
+        total_cost = sum([item.get_total() for item in cart])
+        return render(request, 'order/order_create.html', {'cart': cart, 'total_cost': total_cost})
+    
+    def post(self, request):
+        form = OrderForm(request.POST)
+        cart_data = get_cart_data(request.user)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.user = request.user
+            order.total_price = cart_data.get('total_price', 99999)
+            
+            
+            #Очищаємо корзину і добавляємо товари в замовлення в одній транзакції
+            #транзакція - це група дій, які виконуються як одна атомарна одиниця
+            with transaction.atomic():
+                order.save()
+                for item in cart_data.get('cart'):
+                    order_product = OrderProduct(
+                        order=order,
+                        product=item.product,
+                        quantity=item.quantity,
+                        price=item.product.price
+                    )
+                    order_product.save()
+                    item.product.quantity -= item.quantity
+                    item.product.save()
+                Cart.objects.filter(user=request.user).delete()
+                    
+            messages.success(request, 'Замовлення створено')
+            return redirect('order:complete', order_id=order.id)
+        else:
+            messages.error(request, f'Помилка створення замовлення {form.errors}')
+            return redirect('order:checkout')      
+        
+        
+class OrderCompleteHandler(View):
+    def get(self, request, order_id):
+        order = get_object_or_404(Order, pk=order_id)
+        return render(request, 'order/order_complete.html', {'order': order})

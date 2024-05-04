@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+
+{% block title %}Order Create{% endblock %}
+
+
+
+{% block content %}
+    <div class="my-4">
+        <div class="flex">
+            <div class="w-4/5 rounded-lg bg-base-300 p-9">
+                <h1 class = "text-3xl font-bold mb-4">Оформлення замовлення</h1>
+                <h3 class="text-xl font-bold">Отримувач</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Ім'я</span>
+                        </label>
+                        <input type="text" name="first_name" class="input input-bordered" required>
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Прізвище</span>
+                        </label>
+                        <input type="text" name="last_name" class="input input-bordered" required>
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Мобільний телефон</span>
+                        </label>
+                        <input type="text" name="phone" class="input input-bordered" required>
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Email</span>
+                        </label>
+                        <input type="email" name="email" class="input input-bordered" required>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h2 class="text-2xl font-bold mb-4">Кошик</h2>
+                    <div class="grid grid-cols-1 gap-4">
+                        {% for item in cart %}
+                        <a href="{% url 'catalog:product_detail' item.product.slug %}" class="">
+                            <div class="flex items-center gap-4 bg-base-100 p-4 rounded-lg hover:text-primary transition-colors duration-200 ease-in-out hover:bg-base-200">
+
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-lg">
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-bold">{{ item.product.title }}</h3>
+                                    <p>{{ item.product.price|floatformat:1 }} грн x {{ item.quantity }}</p>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h2 class="text-2xl font-bold mb-4">Спосіб доставки</h2>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="flex justify-between items-center gap-4 bg-base-100 p-4 rounded-lg hover:text-primary transition-colors duration-200 ease-in-out hover:bg-base-200">
+                            <div class='flex item-center gap-4'>   
+                                <input type="radio" name="delivery" value="pickup" class="radio radio-primary" checked>
+                                <label>Самовивіз</label>
+                            </div>
+                            <span class="text-green-500">Безкоштовно</span>
+                        </div>
+                        <div class="flex justify-between items-center gap-4 bg-base-100 p-4 rounded-lg hover:text-primary transition-colors duration-200 ease-in-out hover:bg-base-200">
+                            <div class='flex item-center gap-4'>   
+                                <input type="radio" name="delivery" value="courier" class="radio radio-primary">
+                                <label>Кур'єром</label>
+                            </div>
+                            <span class="text-green-500">200 грн</span>
+                        </div>
+                        <div class="flex justify-between items-center gap-4 bg-base-100 p-4 rounded-lg hover:text-primary transition-colors duration-200 ease-in-out hover:bg-base-200">
+                            <div class='flex item-center gap-4'>   
+                                <input type="radio" name="delivery" value="nova_poshta" class="radio radio-primary">
+                                <label>Нова Пошта</label>
+                            </div>
+                            <span class="text-green-500">70 грн</span>
+                        </div>
+                        <div class='flex justify-between items-center gap-4 bg-base-100 p-4 rounded-lg hover:text-primary transition-colors duration-200 ease-in-out hover:bg-base-200'>
+                            <div class='flex item-center gap-4'>   
+                                <input type="radio" name="delivery" value="ukrposhta" class="radio radio-primary">
+                                <label>Укрпошта</label>
+                            </div>
+                            <span class="text-green-500">50 грн</span>
+                        </div>  
+                    </div>
+                    <div class="form-control" id="address" style="display: none;"
+                        <label class="label">
+                            <span class="label-text">Адреса або відділення</span>
+                        </label>
+                        <textarea name="address" class="textarea textarea-bordered" required></textarea>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="w-1/4 ml-4 ">
+                <div class="sticky top-4 rounded-lg bg-base-300 p-9">
+                    <h2 class="text-2xl font-bold mb-4">Разом</h2>
+                    <div class="flex justify-between mb-4">
+                        <span>{{ cart|length }} товарів</span>
+                        <span>{{ total_cost }} грн</span>
+                    </div>
+                    <div class="flex justify-between mb-4">
+                        <span>Вартість доставки:</span>
+                        <span class="font-bold" id='delivery'>Безкоштовно<span>
+                    </div>
+                    <div class="flex justify-between mb-4">
+                        <span>Сума</span>
+                        <span id='total'>XX грн</span>
+                    </div>
+                    <button class="btn btn-primary w-full" id="button_order">Оформити замовлення</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let delivery = document.getElementById('delivery');
+        let total = document.getElementById('total');
+        let totalCost = {{ total_cost|floatformat:0 }};
+        let deliveryCost = 0;
+
+        let suma = totalCost + deliveryCost;
+
+        document.getElementById('total').innerText = `${suma} грн`;
+
+
+        document.querySelectorAll('input[name="delivery"]').forEach((elem) => {
+            elem.addEventListener('change', (e) => {
+                if (e.target.value === 'pickup') {
+                    document.getElementById('address').style.display = 'none';
+                    deliveryCost = 0;
+                    delivery.innerText = 'Безкоштовно';
+                    
+                } else {
+                    document.getElementById('address').style.display = 'flex';
+                    if (e.target.value === 'courier') {
+                        deliveryCost = 200;
+                    } else if (e.target.value === 'nova_poshta') {
+                        deliveryCost = 70;
+                    } else if (e.target.value === 'ukrposhta') {
+                        deliveryCost = 50;
+                    }
+                    delivery.innerText = `${deliveryCost} грн`;
+
+                }
+                total.innerText = `${totalCost + deliveryCost} грн`;
+
+
+            });
+        });
+
+        // підготовка форми до відправки коли натиснута кнопка "Оформити замовлення"
+        document.getElementById('button_order').addEventListener('click', function() {
+            // збір даних з форми
+            var firstName = document.querySelector('input[name="first_name"]').value;
+            var lastName = document.querySelector('input[name="last_name"]').value;
+            var phone = document.querySelector('input[name="phone"]').value;
+            var email = document.querySelector('input[name="email"]').value;
+            var delivery = document.querySelector('input[name="delivery"]:checked').value;
+            var address = document.querySelector('textarea[name="address"]').value;
+
+            // перевірка на обов'язкові поля
+            if (firstName === '' || lastName === '' || phone === '' || email === '') {
+            alert('Будь ласка, заповніть всі обов\'язкові поля');
+            return;
+            }
+
+            // створення форми з даними
+            var form = document.createElement('form');
+            form.method = 'POST';
+
+            //CR
+            var csrfToken = '{{ csrf_token }}';
+            var csrfField = document.createElement('input');
+            csrfField.type = 'hidden';
+            csrfField.name = 'csrfmiddlewaretoken';
+            csrfField.value = csrfToken;
+            form.appendChild(csrfField);
+
+            // додавання полів до форми
+            var firstNameField = document.createElement('input');
+            firstNameField.type = 'hidden';
+            firstNameField.name = 'first_name';
+            firstNameField.value = firstName;
+            form.appendChild(firstNameField);
+
+            var lastNameField = document.createElement('input');
+            lastNameField.type = 'hidden';
+            lastNameField.name = 'last_name';
+            lastNameField.value = lastName;
+            form.appendChild(lastNameField);
+
+            var phoneField = document.createElement('input');
+            phoneField.type = 'hidden';
+            phoneField.name = 'phone';
+            phoneField.value = phone;
+            form.appendChild(phoneField);
+
+            var emailField = document.createElement('input');
+            emailField.type = 'hidden';
+            emailField.name = 'email';
+            emailField.value = email;
+            form.appendChild(emailField);
+
+            var deliveryField = document.createElement('input');
+            deliveryField.type = 'hidden';
+            deliveryField.name = 'delivery';
+            deliveryField.value = delivery;
+            form.appendChild(deliveryField);
+
+            var addressField = document.createElement('input');
+            addressField.type = 'hidden';
+            addressField.name = 'address';
+            addressField.value = address;
+            form.appendChild(addressField);
+
+            // додавання форми до сторінки і відправка
+            document.body.appendChild(form);
+            form.submit();
+        });
+    </script>
+{% endblock %}
+

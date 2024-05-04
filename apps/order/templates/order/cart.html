@@ -60,10 +60,10 @@
         </table>
         <div class="flex justify-between items-center mt-4">
             <p class="text-2xl font-bold">Total: {{ get_total_cost|floatformat:0 }}</p>
-            <a href="" class="btn btn-error">Clear cart</a>
+            <a href="{% url 'order:cart_clear' %}" class="btn btn-error">Clear cart</a>
            
         </div>
-        <a href="" class="btn btn-primary mt-4">Create order</a>
+        <a href="{% url 'order:checkout' %}" class="btn btn-primary mt-4">Create order</a>
     </div>
 {% endblock %}
 
