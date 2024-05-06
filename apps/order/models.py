@@ -36,6 +36,13 @@ class Order(models.Model):
         (False, 'Не оплачено')
     )
     
+    DELIVERY_CHOICES = (
+        ('new_post', 'Нова пошта'),
+        ('ukr_post', 'Укрпошта'),
+        ('pickup', 'Самовивіз'),
+        ('courier', 'Кур\'єрська доставка')
+    )
+    
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Total price', default=9999999)
 
@@ -43,7 +50,7 @@ class Order(models.Model):
     last_name = models.CharField(max_length=50)
     phone = PhoneNumberField(verbose_name='Phone')
     email = models.EmailField()
-    delivery = models.CharField(max_length=50)
+    delivery = models.CharField(max_length=50, choices=DELIVERY_CHOICES)
     address = models.CharField(max_length=250)
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -60,6 +67,14 @@ class Order(models.Model):
         
     def __str__(self):
         return f'Order {self.id}'
+    
+    
+    def get_all_products(self):
+        return self.order_products.all().prefetch_related('product').prefetch_related('product__images')
+    
+    def get_total(self):
+        return sum([item.get_total() for item in self.order_products.all()])
+    
     
     
 

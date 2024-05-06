@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+
+{% block title %}My Orders{% endblock %}
+
+
+
+{% block content %}
+    <div class="my-4">
+       
+        <h1 class = "text-3xl font-bold mb-4 text-center">My Orders</h1>
+
+
+        {% for order in orders %}
+        <div class="collapse bg-base-200">
+            <input type="checkbox" class="peer" /> 
+            <div class="collapse-title flex items-center justify-between pr-4">
+                <div class="flex items-center gap-4 flex-col">
+                    <div class="flex items-center gap-4">
+                        <span>№{{ order.id }}</span>
+                        <p class="text-sm">від {{ order.created_at|date:"d.m.Y" }}</p>
+                    </div>
+                    <p class="text-sm font-bold {% if not order.status == 'cancelled' %}text-green{% else %}text-gray font-crossed{% endif %}">{{ order.get_status_display }}</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    {% for item in order.get_all_products %}
+                        <a href="{% url 'catalog:product_detail' item.product.slug %}" class="hover:translate-y-1 transition-transform duration-200 ease-in-out">
+                            <img src="{{ item.product.main_image.thumbnail.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-lg">
+                        </a>    
+                    {% endfor %}
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center flex-col">
+                        <p class="text-sm text-gray-500">Всього:</p>
+                        <p class="text-sm font-bold">{{ order.get_total }} грн</p>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <div class="collapse-content">
+                <div class="flex items-center gap-4 justify-between">
+                    <div class="grid grid-cols-8 gap-4">
+                        <div class="col-span-8 md:col-span-2 flex gap-4 flex-col">
+                            <a href="" class="btn btn-secondary">Повторити замовлення</a>
+                            <a href="" class="btn btn-primary">Залишити відгук</a>
+                            <hr class="my-4 border-primary">
+                            <div class="flex gap-4 md:flex-col flex-row justify-between md:justify-start">
+                                <div class="flex gap-2 flex-col">
+                                    <i class="fas fa-truck"></i>
+                                    <p class="text-sm font-bold">Доставка</p>
+                                    <p class="text-sm text-gray-500">Спосіб доставки:</p>
+                                    <p>{{ order.get_delivery_display }}</p> 
+                                    <p class="text-sm text-gray-500">Адреса:</p>
+                                    <p>{{ order.address }}</p>
+                                </div>
+                                
+                                <div class="flex gap-1 flex-col">
+                                    <i class="fas fa-credit-card"></i>
+                                    <p class="text-sm font-bold">Оплата</p>
+                                    <p class="text-sm text-gray-500">Спосіб оплати:</p>
+                                    <p>{{ order.get_payment_display }}</p>
+                                </div>
+                                <div class="flex gap-1 flex-col">
+                                    <i class="fas fa-user"></i>
+                                    <p class="text-sm font-bold">Контакти</p>
+                                    <p class="text-sm text-gray-500">Email:</p>
+                                    <p>{{ order.email }}</p>
+                                    <p class="text-sm text-gray-500">Ім'я:</p>
+                                    <p>{{ order.first_name }}</p>
+                                    <p class="text-sm text-gray-500">Прізвище:</p>
+                                    <p>{{ order.last_name }}</p>
+                                    <p class="text-sm text-gray-500">Телефон:</p>
+                                    <p>{{ order.phone }}</p>
+                                </div>
+                            </div>                 
+                        </div>
+                        <div class="col-span-8 md:col-span-6">
+                            <h3 class="text-lg font-bold">Товари</h3>
+                            <div class="grid grid-cols-1 gap-4">
+                                {% for item in order.get_all_products %}
+                                <a href="{% url 'catalog:product_detail' item.product.slug %}" class="">
+                                    <div class="flex items-center gap-4 bg-base-100 p-4 rounded-lg hover:text-primary transition-colors duration-200 ease-in-out hover:bg-base-200">
+        
+                                        <img src="{{ item.product.main_image.thumbnail.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-lg">
+                                        <div class="flex-1">
+                                            <h3 class="text-lg font-bold">{{ item.product.title }}</h3>
+                                            <p>{{ item.product.price|floatformat:1 }} грн x {{ item.quantity }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endfor %}
+                            </div>
+                            <hr class="my-4 border-primary">
+                            <h3 class="text-lg font-bold">Оплата</h3>
+                            <p> ГРИВНЯМИ</p>
+                            <hr class="my-4 border-primary">
+                            <h3 class="text-lg font-bold">Доставка</h3>
+                            <p> Якась сума доставки</p>
+                            <h1 class="text-2xl font-bold mt-4">Всього: {{ order.get_total }} грн</h1>
+
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+        {% endfor %}
+
+
+        <!-- <div class="bg-base-300 p-9 rounded-lg">
+            <table class="table w-full">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Order Number</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-base-200 rounded-lg">
+                    {% for order in orders %}
+                    <tr class="hover:bg-base-100 transition-colors duration-200 ease-in-out {% if not order.paid %}bg-primary{% else %}bg-base-200{% endif %} ">
+                        {% if not order.paid %}
+                            <td>
+                                <span class="badge">New</span>
+                            </td>
+                        {% else %}
+                            <td>
+                                <span class="badge">Paid</span>
+                            </td>
+
+                        {% endif %}
+                        <td>
+                            <a href="" class="hover:text-primary transition-colors duration-200 ease-in-out">
+                                {{ order.id }}
+                            </a>  
+                        </td>
+                        <td>{{ order.created_at|date:"d.m.Y" }}</td>
+                        <td>{{ order.get_total }} грн</td>
+                        <td>{{ order.get_status_display }}</td>
+                        <td>
+                            <a href="" class="btn ghost"><i class="fas fa-eye"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div> -->
+    </div>
+
+{% endblock %}
+

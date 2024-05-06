@@ -70,6 +70,13 @@
               <span class="badge">New</span>
             </a>
           </li>
+          <li>
+            <!-- Мої заммовлення -->
+            <a class="justify-between" href="{% url 'order:order_list' %}">
+              <span> <i class="fas fa-shopping-bag"></i> Orders </span>
+              <span class="badge">New</span>
+            </a>
+          </li>
           <li><a href="{% url 'members:logout' %}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
         </ul>
       </div>
