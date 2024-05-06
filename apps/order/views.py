@@ -7,6 +7,8 @@ from django.db import transaction
 from .models import Cart, Order, OrderProduct
 from .forms import CartForm, OrderForm
 
+
+
 def get_cart_data(user):
     cart = Cart.objects.filter(user=user).prefetch_related('product').prefetch_related('product__images')
     total_price = sum([item.get_total() for item in cart])
@@ -65,6 +67,7 @@ class CheckoutHandler(View):
     def get(self, request):
         cart = Cart.objects.filter(user=request.user).order_by('product__price')
         total_cost = sum([item.get_total() for item in cart])
+        form = OrderForm()
         return render(request, 'order/order_create.html', {'cart': cart, 'total_cost': total_cost})
     
     def post(self, request):
@@ -95,8 +98,9 @@ class CheckoutHandler(View):
             messages.success(request, 'Замовлення створено')
             return redirect('order:complete', order_id=order.id)
         else:
-            messages.error(request, f'Помилка створення замовлення {form.errors}')
-            return redirect('order:checkout')      
+            
+            messages.error(request, f'Помилка створення замовлення ')
+            return render(request, 'order/order_create.html', {'cart': cart_data.get('cart'), 'total_cost': cart_data.get('total_price'), 'form': form})    
         
         
 class OrderCompleteHandler(View):

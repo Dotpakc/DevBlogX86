@@ -16,25 +16,37 @@
                         <label class="label">
                             <span class="label-text">Ім'я</span>
                         </label>
-                        <input type="text" name="first_name" class="input input-bordered" required>
+                        <input type="text" name="first_name" class="input input-bordered {% if form.first_name.errors %}input-error{% endif %}" required>
+                        {% if form.first_name.errors %}
+                            <div class="text-red-500">{{ form.first_name.errors }}</div>
+                        {% endif %}
                     </div>
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text">Прізвище</span>
                         </label>
-                        <input type="text" name="last_name" class="input input-bordered" required>
+                        <input type="text" name="last_name" class="input input-bordered {% if form.last_name.errors %}input-error{% endif %}" required>
+                        {% if form.last_name.errors %}
+                            <div class="text-red-500">{{ form.last_name.errors }}</div>
+                        {% endif %}
                     </div>
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text">Мобільний телефон</span>
                         </label>
-                        <input type="text" name="phone" class="input input-bordered" required>
+                        <input type="text" name="phone" class="input input-bordered {% if form.phone.errors %}input-error{% endif %}" required>
+                        {% if form.phone.errors %}
+                            <div class="text-red-500">{{ form.phone.errors }}</div>
+                        {% endif %}
                     </div>
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text">Email</span>
                         </label>
-                        <input type="email" name="email" class="input input-bordered" required>
+                        <input type="email" name="email" class="input input-bordered {% if form.email.errors %}input-error{% endif %}" required>
+                        {% if form.email.errors %}
+                            <div class="text-red-500">{{ form.email.errors }}</div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="mt-4">
@@ -44,7 +56,7 @@
                         <a href="{% url 'catalog:product_detail' item.product.slug %}" class="">
                             <div class="flex items-center gap-4 bg-base-100 p-4 rounded-lg hover:text-primary transition-colors duration-200 ease-in-out hover:bg-base-200">
 
-                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-lg">
+                                <img src="{{ item.product.main_image.thumbnail.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-lg">
                                 <div class="flex-1">
                                     <h3 class="text-lg font-bold">{{ item.product.title }}</h3>
                                     <p>{{ item.product.price|floatformat:1 }} грн x {{ item.quantity }}</p>
@@ -161,7 +173,7 @@
             var phone = document.querySelector('input[name="phone"]').value;
             var email = document.querySelector('input[name="email"]').value;
             var delivery = document.querySelector('input[name="delivery"]:checked').value;
-            var address = document.querySelector('textarea[name="address"]').value;
+            var address = document.querySelector('textarea[name="address"]').value || 'Самовивіз';
 
             // перевірка на обов'язкові поля
             if (firstName === '' || lastName === '' || phone === '' || email === '') {
