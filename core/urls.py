@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [ #google.com/
+    path('api/', include('apps.api.urls')),#google.com/api/
     path('order/', include('apps.order.urls')),#google.com/order/
     path('catalog/', include('apps.catalog.urls')),#google.com/catalog/ 
     path('admin/', admin.site.urls),#google.com/admin/

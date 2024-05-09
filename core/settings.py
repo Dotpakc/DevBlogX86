@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'apps.members',
     'apps.catalog',
     'apps.order',
+    'apps.api',
 ]
 
 MIDDLEWARE = [
