@@ -26,13 +26,6 @@ router = routers.DefaultRouter() # це роутер для автоматичн
 router.register(r'users', views.UserViewSet) # реєструємо ресурси users та groups
 router.register(r'groups', views.GroupViewSet) #google.com/api/v1/groups/
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
-urlpatterns = [
-    path('', include(router.urls)),
-]
-
-
 
 urlpatterns = [ #google.com/
                

@@ -6,16 +6,109 @@
 {% block content %}
 
 
-<div class="hero bg-base-200 mt-10 py-10">
+<div class="hero bg-base-200 mt-10 py-10 rounded-box">
     <div class="hero-content flex-col lg:flex-row">
-      <img src="https://daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg" class="max-w-sm rounded-lg shadow-2xl" />
+      <img src="https://i.natgeofe.com/n/9135ca87-0115-4a22-8caf-d1bdef97a814/75552.jpg" class="max-w-sm rounded-lg shadow-2xl" />
       <div>
         <h1 class="text-5xl font-bold">Box Office News!</h1>
         <p class="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
         <button class="btn btn-primary">Get Started</button>
       </div>
     </div>
-  </div>
+</div>
 
+
+<div class="bg-base-200 p-10 rounded-box mt-10">
+    <h1 class="text-3xl font-bold">Новинки</h1>
+    <div class="owl-carousel owl-theme mt-5">
+      <div id='loldel'>
+        <div class="item"><div class="flex flex-col gap-4 w-52">
+          <div class="skeleton h-32 w-full"></div>
+          <div class="skeleton h-4 w-28"></div>
+          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-4 w-full"></div>
+        </div></div>
+        <div class="item"><div class="flex flex-col gap-4 w-52">
+          <div class="skeleton h-32 w-full"></div>
+          <div class="skeleton h-4 w-28"></div>
+          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-4 w-full"></div>
+        </div></div>
+      </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function(){
+
+      $.ajax({
+        url: '/api/v2/catalog/products/new/',
+        method: 'GET',
+        success: function(response) {
+          // Handle the JSON response here
+          console.log(response.results);
+
+          
+           // Loop through the data.resulte array and create card elements
+           response.results.forEach(function(item) {
+            // Create a card element
+            var card = $("<div>").addClass("item").html(`
+              <a href="/catalog/product/${item.slug}">
+              <div class="flex flex-col gap-4 w-52">
+                <img src="${item.images[0].image}" class="rounded-lg shadow-2xl" />
+                <div class="text-xl font-bold">${item.title}</div>
+                <div class="text-base">${item.price}</div>
+              </div>
+              </a>
+            `);
+
+            // Append the card to the owl-carousel
+            $(".owl-carousel").append(card);
+
+           
+          });
+          $("#loldel").empty();
+
+          $(".owl-carousel").owlCarousel({
+
+            margin:10,
+            nav:true,
+            responsive:{
+                0:{
+                    items:1
+                },
+                600:{
+                    items:3
+                },
+                1200:{
+                    items:5
+                }
+            }
+        });
+        },
+        error: function(error) {
+          // Handle the error here
+          console.log(error);
+        }
+      });
+
+
+
+
+
+        
+
+        
+
+
+
+
+    });
+
+
+
+
+</script>
 {% endblock %}
   
