@@ -19,8 +19,29 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from rest_framework import routers
+from apps.api import views
+
+router = routers.DefaultRouter() # це роутер для автоматичного визначення шляхів до ресурсів
+router.register(r'users', views.UserViewSet) # реєструємо ресурси users та groups
+router.register(r'groups', views.GroupViewSet) #google.com/api/v1/groups/
+
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API.
+urlpatterns = [
+    path('', include(router.urls)),
+]
+
+
+
 urlpatterns = [ #google.com/
-    path('api/', include('apps.api.urls')),#google.com/api/
+               
+               
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api/v1/', include(router.urls)),#google.com/api/v1/
+    path('api/v2/', include('apps.api.urls')),#google.com/api/v2/
+    
+    
     path('order/', include('apps.order.urls')),#google.com/order/
     path('catalog/', include('apps.catalog.urls')),#google.com/catalog/ 
     path('admin/', admin.site.urls),#google.com/admin/
