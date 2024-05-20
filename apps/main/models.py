@@ -13,7 +13,7 @@ class Page(models.Model):
     
     
     class Meta:
-        ordering = ['sort']
+        ordering = ['-sort']
         verbose_name = "Страница"
         verbose_name_plural = "Страницы"
         

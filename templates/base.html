@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="{% static 'module/magiczoom/magiczoom.css' %}">
     <script src="{% static 'module/magiczoom/magiczoom.js' %}"></script>
 
+    <!-- favicon -->
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- OWL Carusel -->
@@ -73,9 +75,7 @@
       </div>
       {% endif %}
     {% block content %}{% endblock %}
-    </div>
-
-    <footer class="footer p-10 bg-base-200 text-base-content mt-10">
+    <footer class="footer p-10 bg-base-200 text-base-content mt-10 rounded-box grid grid-cols-1 md:grid-cols-4 gap-4 text-center text-white shadow-lg rounded-lg bg-gradient-to-r from-blue-500 to-green-400 flex flex-wrap justify-center md:justify-between w-full">
       <aside>
         <h1 class="text-3xl font-bold">🎈🐍DEVBLOGX86</h1>
         <p class="text-sm">A blog about programming, web development, and tech.</p>
@@ -101,6 +101,11 @@
         <a class="link link-hover">Cookie policy</a>
       </nav>
     </footer>
+    </div>
+
+
+
+    
 
   </body>
 </html>
