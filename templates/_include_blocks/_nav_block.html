@@ -5,9 +5,12 @@
     </div>
     <div class="navbar-center flex">
       <ul class="menu menu-horizontal px-1">
-        <li><a href="{% url 'main:lol' %}">lol</a></li>
+
         <li><a href="{% url 'blog:index' %}">Blog</a></li>
         <li><a href="{% url 'catalog:index' %}"><i class="fas fa-book"></i> Catalog</a></li>
+        {% for page in pages %}
+          <li><a href="{{page.get_absolute_url}}">{{page.title}}</a></li>
+        {% endfor %}
       </ul>
     </div>
     <div class="navbar-end flex">
@@ -67,6 +70,13 @@
           <li>
             <a class="justify-between" href="{% url 'members:profile' user.profile.id %}">
               <span> <i class="fas fa-user"></i> Profile </span>
+              <span class="badge">New</span>
+            </a>
+          </li>
+          <li>
+            <!-- Мої заммовлення -->
+            <a class="justify-between" href="{% url 'order:order_list' %}">
+              <span> <i class="fas fa-shopping-bag"></i> Orders </span>
               <span class="badge">New</span>
             </a>
           </li>

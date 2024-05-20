@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    
+    'rest_framework',
+    
     "ckeditor",
     'django_ckeditor_5',
     "debug_toolbar",
@@ -62,6 +65,7 @@ INSTALLED_APPS = [
     'apps.members',
     'apps.catalog',
     'apps.order',
+    'apps.api',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +92,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.main.context_processor.pages'
             ],
         },
     },
@@ -231,4 +236,12 @@ CKEDITOR_5_CONFIGS = {
             'reversed': 'true',
         }
     }
+}
+
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }

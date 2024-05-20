@@ -26,7 +26,7 @@
                         <td>
                             <a href="{% url 'catalog:product_detail' item.product.slug %}" class="hover:text-primary transition-colors duration-200 ease-in-out"> <!-- Add hover effect to the link -->
                                 <div class="flex items-center gap-4">
-                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-lg">
+                                    <img src="{{ item.product.main_image.thumbnail.url }}" alt="{{ item.product.name }}" class="w-16 h-16 object-cover rounded-lg">
                                     <div>
                                         <h3 class="text-lg font-bold">{{ item.product.title }}</h3>
                                     </div>
