@@ -8,6 +8,9 @@
 
         <li><a href="{% url 'blog:index' %}">Blog</a></li>
         <li><a href="{% url 'catalog:index' %}"><i class="fas fa-book"></i> Catalog</a></li>
+        {% for page in pages %}
+          <li><a href="{{page.get_absolute_url}}">{{page.title}}</a></li>
+        {% endfor %}
       </ul>
     </div>
     <div class="navbar-end flex">
